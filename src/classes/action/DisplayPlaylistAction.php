@@ -7,7 +7,6 @@ use iutnc\deefy\audio\lists\Playlist;
 
 class DisplayPlaylistAction extends Action
 {
-
     public function execute(): string
     {
         if(isset($_SESSION['playlist']) && $_SESSION['playlist'] instanceof Playlist) {
@@ -17,6 +16,6 @@ class DisplayPlaylistAction extends Action
             return $renderer->render(1);
         }
 
-        return "<div>Erreur : aucune playlist n'a été trouvée.</div>";
+        return "<div>Error: No playlists found.</div>";
     }
 }
