@@ -10,16 +10,14 @@ class AlbumTrack extends AudioTrack
     protected int $numero_piste;
     protected string $genre;
 
-    public function __construct($titre, $chemin_fichier, $album, $numero_piste, $duree = 0)
+    public function __construct($titre, $chemin_fichier, $album, $numero_piste, $duree = 0, $artiste = "Unknown Artist", $annee = 0, $genre = "Unknown Genre")
     {
         parent::__construct($titre, $chemin_fichier, $duree);
-        $this->titre = $titre;
-        $this->nom_du_fichier = $chemin_fichier;
         $this->album = $album;
         $this->numero_piste = $numero_piste;
-        $this->artiste = "Inconnu";
-        $this->annee = 0;
-        $this->genre = "Inconnu";
+        $this->artiste = $artiste;
+        $this->annee = $annee;
+        $this->genre = $genre;
     }
 
     public function setArtiste(string $artiste): void
