@@ -51,7 +51,7 @@ HTML;
 
         try {
             AuthProvider::register($email, $passwd);
-            return "<div>Registration successful for $email</div>";
+            return "<div>Account successfully created for $email. You can now <a href='?action=signin'>sign in</a>.</div>";
         } catch (AuthnException $e) {
             return "<div>Error: " . $e->getMessage() . "</div>";
         }

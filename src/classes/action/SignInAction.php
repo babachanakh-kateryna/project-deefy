@@ -40,9 +40,9 @@ HTML;
 
         try {
             AuthProvider::signin($email, $passwd);
-            return "<div>Successfully signed in as $email</div>";
+            return "<div>Successfully signed in as $email</div><a href='?action=default'>Go to Home</a>";
         } catch (AuthnException $e) {
-            return "<div>Error: " . $e->getMessage() . "</div>";
+            return "<div>Error: " . $e->getMessage() . "</div><a href='?action=signin'>Try Again</a>";
         }
     }
 }

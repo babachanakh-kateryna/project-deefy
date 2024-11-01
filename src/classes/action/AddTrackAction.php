@@ -88,8 +88,6 @@ HTML;
 
     private function addTrack(): string
     {
-        error_log("Add Track method called.");
-
         if (!isset($_SESSION['current_playlist'])) {
             return "<div>Error: No current playlist found.</div>";
         }
