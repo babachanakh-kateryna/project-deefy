@@ -2,6 +2,7 @@
 
 namespace iutnc\deefy\repository;
 
+use iutnc\deefy\audio\lists\Playlist;
 use PDO;
 
 class DeefyRepository
@@ -37,5 +38,38 @@ class DeefyRepository
             'user' => $conf['username'],
             'pass' => $conf['password'],
         ];
+    }
+
+    // Methode pour recuperer toutes les playlists
+    public function findAllPlaylists(): array
+    {
+        $stmt = $this->pdo->query("SELECT id, nom FROM playlist");
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    // Methode pour recuperer une playlist par son id
+    public function findPlaylistById(int $id): Playlist
+    {
+        $stmt = $this->pdo->prepare("SELECT id, nom FROM playlist WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($data === false) {
+            throw new \Exception("Playlist not found");
+        }
+
+        $playlist = new Playlist($data['nom']);
+        $playlist->id = $data['id'];
+
+        return $playlist;
+    }
+
+    // Methode pour sauvegarder une playlist vide
+    public function saveEmptyPlaylist($playlist): Playlist
+    {
+        $stmt = $this->pdo->prepare("INSERT INTO playlist (nom) VALUES (:nom)");
+        $stmt->execute(['nom' => $playlist->nom]);
+        $playlist->id = $this->pdo->lastInsertId();
+        return $playlist;
     }
 }
