@@ -4,6 +4,7 @@ namespace iutnc\deefy\action;
 
 use iutnc\deefy\audio\lists\Playlist;
 use iutnc\deefy\render\AudioListRenderer;
+use iutnc\deefy\repository\DeefyRepository;
 
 class AddPlaylistAction extends Action
 {
@@ -33,17 +34,15 @@ HTML;
 
     private function createPlaylist(): string
     {
-        $playlist = $_SESSION['playlist'];
-
         $name = filter_var($_POST['name'], FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!isset($playlist )) {
-            $playlist = new Playlist($name);
-            $renderer = new AudioListRenderer($playlist);
-            $html = $renderer->render(1);
-            $html .= '<a href="?action=add-track">Add a track</a>';
-            return "<div>Playlist created : $html</div>";
-        } else {
-            return "<div>Error: A playlist already exists.</div>";
-        }
+
+        $repo = DeefyRepository::getInstance();
+        $playlist = new Playlist($name);
+        $playlist = $repo->saveEmptyPlaylist($playlist);
+
+        $renderer = new AudioListRenderer($playlist);
+        $html = $renderer->render(1);
+        $html .= '<a href="?action=add-track">Add a track</a>';
+        return "<div>Playlist created : $html</div>";
     }
 }

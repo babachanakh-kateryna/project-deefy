@@ -21,6 +21,10 @@ class DeefyRepository
 
     public static function getInstance(): self
     {
+        // Check if the configuration is set
+        if (empty(self::$config)) {
+            throw new \Exception("Database configuration is not set");
+        }
         if (is_null(self::$instance)) {
             self::$instance = new DeefyRepository(self::$config);
         }
@@ -32,6 +36,10 @@ class DeefyRepository
         $conf = parse_ini_file($file);
         if ($conf === false) {
             throw new \Exception("Error reading configuration file");
+        }
+
+        if (!isset($conf['host'], $conf['dbname'], $conf['username'], $conf['password'])) {
+            throw new \Exception("Configuration file is missing required database parameters.");
         }
 
         self::$config = [
