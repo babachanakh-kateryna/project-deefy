@@ -2,6 +2,9 @@
 
 namespace iutnc\deefy\audio\tracks;
 
+use iutnc\deefy\exception\InvalidPropertyNameException;
+use iutnc\deefy\exception\InvalidPropertyValueException;
+
 abstract class AudioTrack
 {
     private string $titre;
@@ -34,7 +37,12 @@ abstract class AudioTrack
         if($d>0){
             $this->duree = $d;
         } else {
-            throw new InvalidPropertyValueException("La durée doit être supérieure à 0");
+            throw new InvalidPropertyValueException("Duration must be greater than 0");
         }
+    }
+
+    public function getDuree(): int
+    {
+        return $this->duree;
     }
 }
