@@ -126,4 +126,9 @@ class DeefyRepository
             'no_piste_dans_liste' => $noPisteDansListe
         ]);
     }
+
+    public function getPDO(): PDO
+    {
+        return $this->pdo;
+    }
 }

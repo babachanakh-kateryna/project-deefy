@@ -38,6 +38,10 @@ class Dispatcher
                 $action = new act\AddUserAction();
                 $html = $action->execute();
                 break;
+            case 'signin':
+                $action = new act\SignInAction();
+                $html = $action->execute();
+                break;
         }
         $this->renderPage($html);
     }
@@ -55,6 +59,7 @@ class Dispatcher
    <h1>Deefy Music App</h1>
    <ul>
          <li><a href="?action=default">Home</a></li>
+         <li><a href="?action=signin">Sign In</a></li>
          <li><a href="?action=add-user">Register</a></li>
          <li><a href="?action=playlist">Display Playlist in Session</a></li>
          <li><a href="?action=add-playlist">Add a Playlist</a></li>
