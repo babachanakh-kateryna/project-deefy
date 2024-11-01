@@ -4,6 +4,7 @@ namespace iutnc\deefy\action;
 
 use iutnc\deefy\audio\tracks as tracks;
 use iutnc\deefy\render as render;
+use iutnc\deefy\repository\DeefyRepository;
 
 class AddPodcastTrackAction extends Action
 {
@@ -72,6 +73,7 @@ HTML;
         }
 
         // file path PodcastTrack
+        $repo = DeefyRepository::getInstance();
         $file_path = "audio/music/" . $newFilename;
 
         $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -83,10 +85,10 @@ HTML;
         $track->setAuteur($author);
         $track->setDate($date);
         $track->setGenre($genre);
+        $track = $repo->savePodcastTrack($track);
 
         $playlist = $_SESSION['playlist'];
-        $playlist->ajouterPiste($track);
-        $_SESSION['playlist'] = $playlist;
+        $repo->addTrackToPlaylist($playlist->id, $track->id, $playlist->nombrePistes + 1);
 
         $renderer = new render\AudioListRenderer($playlist);
         $html = $renderer->render(1);
