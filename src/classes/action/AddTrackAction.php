@@ -26,46 +26,70 @@ class AddTrackAction extends Action
     {
         return <<<HTML
 <form method="post" action="?action=add-track" enctype="multipart/form-data">
-    <label for="type">Track Type:</label>
-    <select id="type" name="type">
+    <label for="type">Track Type :</label>
+    <select id="type" name="type" required onchange="showFields()">
+        <option value="">Select Type</option>
         <option value="P">Podcast</option>
         <option value="A">Album Track</option>
     </select>
-    
-    <label for="title">Title:</label>
-    <input type="text" id="title" name="title" required>
 
-    <label for="author">Author (for Podcasts):</label>
-    <input type="text" id="author" name="author">
+    <div id="podcastFields" style="display:none;">
+        <label for="title">Title :</label>
+        <input type="text" id="title" name="title">
 
-    <label for="date">Date (for Podcasts):</label>
-    <input type="text" id="date" name="date">
+        <label for="author">Author :</label>
+        <input type="text" id="author" name="author">
 
-    <label for="genre">Genre:</label>
-    <input type="text" id="genre" name="genre">
+        <label for="date">Date :</label>
+        <input type="text" id="date" name="date">
 
-    <label for="artist">Artist (for Album Tracks):</label>
-    <input type="text" id="artist" name="artist">
+        <label for="genre">Genre :</label>
+        <input type="text" id="genre" name="genre">
+        
+        <label for="file">Audio File (.mp3) :</label>
+        <input type="file" id="file" name="userfile" accept=".mp3,audio/mpeg">
+    </div>
 
-    <label for="albumTitle">Album Title (for Album Tracks):</label>
-    <input type="text" id="albumTitle" name="albumTitle">
+    <div id="albumFields" style="display:none;">
+        <label for="title">Title :</label>
+        <input type="text" id="title" name="title">
 
-    <label for="year">Year (for Album Tracks):</label>
-    <input type="number" id="year" name="year">
+        <label for="genre">Genre :</label>
+        <input type="text" id="genre" name="genre">
 
-    <label for="trackNumber">Track Number (for Album Tracks):</label>
-    <input type="number" id="trackNumber" name="trackNumber">
+        <label for="artist">Artist :</label>
+        <input type="text" id="artist" name="artist">
 
-    <label for="file">Audio File (.mp3):</label>
-    <input type="file" id="file" name="userfile" accept=".mp3,audio/mpeg">
-    
+        <label for="albumTitle">Album Title :</label>
+        <input type="text" id="albumTitle" name="albumTitle">
+
+        <label for="year">Year :</label>
+        <input type="number" id="year" name="year">
+
+        <label for="trackNumber">Track Number :</label>
+        <input type="number" id="trackNumber" name="trackNumber">
+        
+        <label for="file">Audio File (.mp3) :</label>
+        <input type="file" id="file" name="userfile" accept=".mp3,audio/mpeg">
+    </div>
+
     <button type="submit">Add Track</button>
 </form>
+
+<script>
+function showFields() {
+    var type = document.getElementById("type").value;
+    document.getElementById("podcastFields").style.display = (type === "P") ? "block" : "none";
+    document.getElementById("albumFields").style.display = (type === "A") ? "block" : "none";
+}
+</script>
 HTML;
     }
 
     private function addTrack(): string
     {
+        error_log("Add Track method called.");
+
         if (!isset($_SESSION['current_playlist'])) {
             return "<div>Error: No current playlist found.</div>";
         }
@@ -144,9 +168,12 @@ HTML;
         $playlist = $_SESSION['current_playlist'];
         $repo->addTrackToPlaylist($playlist->id, $track->id, $playlist->nombrePistes + 1);
 
-        $renderer = new render\AudioListRenderer($playlist);
-        $html = $renderer->render(1);
-        $html .= '<a href="?action=add-track">Add another track</a>';
+        $html = "<div>Track successfully added! Reloading playlist...</div>";
+        $html .= "<script>
+                setTimeout(function() {
+                    window.location.href = '?action=display-playlist&id={$playlist->id}';
+                }, 2000);
+              </script>";
 
         return $html;
     }
