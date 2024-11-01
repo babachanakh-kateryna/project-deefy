@@ -3,6 +3,7 @@
 namespace iutnc\deefy\repository;
 
 use iutnc\deefy\audio\lists\Playlist;
+use iutnc\deefy\audio\tracks\AlbumTrack;
 use iutnc\deefy\audio\tracks\PodcastTrack;
 use PDO;
 
@@ -81,7 +82,7 @@ class DeefyRepository
 
         // recuperer les pistes associees a la playlist
         $trackStmt = $this->pdo->prepare("
-        SELECT t.id, t.titre, t.genre, t.duree, t.filename, t.type, t.auteur_podcast, t.date_posdcast
+        SELECT t.*
         FROM track t
         INNER JOIN playlist2track p2t ON t.id = p2t.id_track
         WHERE p2t.id_pl = :id
@@ -92,10 +93,30 @@ class DeefyRepository
 
         // ajouter les pistes a la playlist
         foreach ($tracksData as $trackData) {
-            if ($trackData['type'] === 'P') { // Exemple de vérification pour un type de piste
+            // if PodcastTrack
+            if ($trackData['type'] === 'P') {
                 $track = new PodcastTrack($trackData['titre'], $trackData['filename'], $trackData['duree']);
                 $track->setAuteur($trackData['auteur_podcast']);
                 $track->setDate($trackData['date_posdcast']);
+                $track->setGenre($trackData['genre']);
+                $playlist->ajouterPiste($track);
+            }
+            // if AlbumTrack
+            elseif ($trackData['type'] === 'A')  {
+
+                $track = new AlbumTrack(
+                    $trackData['titre'],
+                    $trackData['filename'],
+                    $trackData['titre_album'] ,
+                    $trackData['numero_album'],
+                    $trackData['duree'],
+                    $trackData['artiste_album'],
+                    $trackData['annee_album'],
+                    $trackData['genre']
+
+                );
+                $track->setArtiste($trackData['artiste_album'] ?? 'Unknown Artist');
+                $track->setAnnee($trackData['annee_album']  ?? 0); ;
                 $track->setGenre($trackData['genre']);
                 $playlist->ajouterPiste($track);
             }
@@ -147,6 +168,28 @@ class DeefyRepository
             'id_track' => $trackId,
             'no_piste_dans_liste' => $noPisteDansListe
         ]);
+    }
+
+    // Methode pour recuperer toutes les playlists d'un utilisateur
+    public function findPlaylistsByUserId(int $userId): array
+    {
+        $stmt = $this->pdo->prepare("
+            SELECT p.id, p.nom
+            FROM playlist p
+            INNER JOIN user2playlist u2p ON p.id = u2p.id_pl
+            WHERE u2p.id_user = :user_id
+        ");
+        $stmt->execute(['user_id' => $userId]);
+        $playlistsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $playlists = [];
+        foreach ($playlistsData as $data) {
+            $playlist = new Playlist($data['nom']);
+            $playlist->id = $data['id'];
+            $playlists[] = $playlist;
+        }
+
+        return $playlists;
     }
 
     public function getPDO(): PDO
