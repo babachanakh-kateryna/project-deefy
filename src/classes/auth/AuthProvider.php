@@ -62,7 +62,7 @@ class AuthProvider
         }
 
         // hasher le mot de passe
-        $hash = password_hash($pass, PASSWORD_DEFAULT, ['cost' => 12]);
+        $hash = password_hash($pass, PASSWORD_BCRYPT, ['cost' => 12]);
 
         // ajouter l'utilisateur a la base de donnees avec le role 1
         $stmt = $pdo->prepare("INSERT INTO user (email, passwd, role) VALUES (?, ?, ?)");
