@@ -2,20 +2,23 @@
 
 namespace iutnc\deefy\action;
 
-use iutnc\deefy\render as render;
-use iutnc\deefy\audio\lists\Playlist;
+use iutnc\deefy\render\AudioListRenderer;
+use iutnc\deefy\repository\DeefyRepository;
 
 class DisplayPlaylistAction extends Action
 {
     public function execute(): string
     {
-        if(isset($_SESSION['playlist']) && $_SESSION['playlist'] instanceof Playlist) {
-            $playlist = $_SESSION['playlist'];
+        $repo = DeefyRepository::getInstance();
 
-            $renderer = new render\AudioListRenderer($playlist);
+        try {
+            $playlist = $repo->findPlaylistById(2);
+
+            $renderer = new AudioListRenderer($playlist);
             return $renderer->render(1);
-        }
 
-        return "<div>Error: No playlists found.</div>";
+        } catch (\Exception $e) {
+            return "<div>Error: " . $e->getMessage() . "</div>";
+        }
     }
 }
