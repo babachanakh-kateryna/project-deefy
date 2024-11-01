@@ -40,9 +40,11 @@ HTML;
         $playlist = new Playlist($name);
         $playlist = $repo->saveEmptyPlaylist($playlist);
 
-        $renderer = new AudioListRenderer($playlist);
-        $html = $renderer->render(1);
-        $html .= '<a href="?action=add-track">Add a track</a>';
-        return "<div>Playlist created : $html</div>";
+        // enregistre la playlist courante dans la session
+        $_SESSION['current_playlist'] = $playlist;
+
+        $html = "<div>Playlist '{$playlist->nom}' created and set as current playlist.</div>";
+        $html .= '<a href="?action=add-track">Add a track to this playlist</a>';
+        return $html;
     }
 }
