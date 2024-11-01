@@ -4,9 +4,11 @@ namespace iutnc\deefy\action;
 
 use getID3;
 use iutnc\deefy\audio\tracks as tracks;
-use iutnc\deefy\render as render;
 use iutnc\deefy\repository\DeefyRepository;
 
+/**
+ * Class AddTrackAction represente une action pour ajouter une piste a une playlist
+ */
 class AddTrackAction extends Action
 {
     public function execute(): string

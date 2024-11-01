@@ -1,6 +1,9 @@
 <?php
 namespace iutnc\deefy\audio\lists;
 
+/**
+ * Class Playlist est une classe qui represente une playlist
+ */
 class Playlist extends AudioList
 {
     public function ajouterPiste($piste): void

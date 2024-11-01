@@ -2,6 +2,9 @@
 
 namespace iutnc\deefy\audio\lists;
 
+/**
+ * Class AudioList is a class that represents a list of audio tracks
+ */
 class AudioList
 {
     protected string $nom;

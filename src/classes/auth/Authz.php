@@ -3,6 +3,9 @@ namespace iutnc\deefy\auth;
 use iutnc\deefy\exception\AuthnException;
 use iutnc\deefy\repository\DeefyRepository;
 
+/**
+ * Class Authz est une classe qui represente l'autorisation
+ */
 class Authz
 {
     const ROLE_ADMIN = 100;

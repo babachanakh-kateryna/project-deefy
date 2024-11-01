@@ -2,6 +2,9 @@
 
 namespace iutnc\deefy\action;
 
+/**
+ * Class DefaultAction est une classe qui represente l'action par defaut
+ */
 class DefaultAction extends Action
 {
 

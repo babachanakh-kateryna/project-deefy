@@ -3,6 +3,9 @@ namespace iutnc\deefy\action;
 
 use iutnc\deefy\repository\DeefyRepository;
 
+/**
+ * Class DisplayUserPlaylistsAction est une classe qui represente les playlists de l'utilisateur
+ */
 class DisplayUserPlaylistsAction extends Action
 {
     public function execute(): string

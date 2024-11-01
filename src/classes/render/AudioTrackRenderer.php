@@ -2,9 +2,11 @@
 
 namespace iutnc\deefy\render;
 
-use iutnc\deefy\audio\lists as lists;
 use iutnc\deefy\audio\tracks as tracks;
 
+/**
+ * Class AudioTrackRenderer est une classe abstraite qui permet de rendre une piste audio
+ */
 abstract class AudioTrackRenderer implements Renderer
 {
     protected tracks\AudioTrack $audioTrack;

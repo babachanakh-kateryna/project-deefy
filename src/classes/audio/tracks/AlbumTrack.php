@@ -2,6 +2,9 @@
 
 namespace iutnc\deefy\audio\tracks;
 
+/**
+ * Class AlbumTrack est une classe qui represente une piste d'un album
+ */
 class AlbumTrack extends AudioTrack
 {
     protected string $artiste;

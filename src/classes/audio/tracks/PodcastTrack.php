@@ -2,6 +2,9 @@
 
 namespace iutnc\deefy\audio\tracks;
 
+/**
+ * Class PodcastTrack est une classe qui represente une piste de podcast
+ */
 class PodcastTrack extends AudioTrack
 {
     protected string $auteur;

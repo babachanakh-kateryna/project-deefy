@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace iutnc\deefy\loader;
 
+/**
+ * Class Psr4ClassLoader
+ * @package iutnc\deefy\loader
+ */
 class Psr4ClassLoader{
     protected $prefix;
     protected $base_dir;

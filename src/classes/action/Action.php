@@ -2,6 +2,9 @@
 
 namespace iutnc\deefy\action;
 
+/**
+ * Class Action est une classe abstraite qui represente une action
+ */
 abstract class Action {
 
     protected ?string $http_method = null;

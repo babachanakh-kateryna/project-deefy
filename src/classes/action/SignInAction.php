@@ -4,6 +4,9 @@ namespace iutnc\deefy\action;
 use iutnc\deefy\auth\AuthProvider;
 use iutnc\deefy\exception\AuthnException;
 
+/**
+ * Class SignInAction est une classe qui represente l'action de sign in
+ */
 class SignInAction extends Action
 {
     public function execute(): string

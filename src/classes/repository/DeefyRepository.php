@@ -8,6 +8,9 @@ use iutnc\deefy\audio\tracks\AudioTrack;
 use iutnc\deefy\audio\tracks\PodcastTrack;
 use PDO;
 
+/**
+ * Class DeefyRepository est une classe qui permet de gerer les donnees de l'application
+ */
 class DeefyRepository
 {
     private \PDO $pdo;

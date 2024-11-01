@@ -5,6 +5,9 @@ namespace iutnc\deefy\action;
 use iutnc\deefy\auth\AuthProvider;
 use iutnc\deefy\exception\AuthnException;
 
+/**
+ * Class AddUserAction est une classe qui represente l'action de registration
+ */
 class AddUserAction extends Action
 {
     public function execute(): string

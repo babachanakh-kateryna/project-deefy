@@ -5,6 +5,9 @@ namespace iutnc\deefy\action;
 use iutnc\deefy\render\AudioListRenderer;
 use iutnc\deefy\repository\DeefyRepository;
 
+/**
+ *  Class DisplayPlaylistAction est une classe qui represente current playlist
+ */
 class DisplayPlaylistAction extends Action
 {
     public function execute(): string

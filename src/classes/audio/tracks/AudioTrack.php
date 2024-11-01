@@ -5,6 +5,9 @@ namespace iutnc\deefy\audio\tracks;
 use iutnc\deefy\exception\InvalidPropertyNameException;
 use iutnc\deefy\exception\InvalidPropertyValueException;
 
+/**
+ * Class AudioTrack est une classe qui represente une piste audio
+ */
 abstract class AudioTrack
 {
     private string $titre;

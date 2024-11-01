@@ -2,9 +2,11 @@
 
 namespace iutnc\deefy\render;
 
-use iutnc\deefy\audio\lists as lists;
 use iutnc\deefy\audio\tracks as tracks;
 
+/**
+ * Class PodcastRenderer est une classe qui permet de rendre une piste de podcast
+ */
 class PodcastRenderer extends AudioTrackRenderer
 {
     private tracks\PodcastTrack $podcastTrack;

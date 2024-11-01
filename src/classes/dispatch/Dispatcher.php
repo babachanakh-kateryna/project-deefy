@@ -5,6 +5,9 @@ namespace iutnc\deefy\dispatch;
 
 use iutnc\deefy\action as act;
 
+/**
+ * Class Dispatcher
+ */
 class Dispatcher
 {
     private ?string $action = null;

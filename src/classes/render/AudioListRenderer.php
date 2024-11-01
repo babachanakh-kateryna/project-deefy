@@ -7,6 +7,9 @@ use iutnc\deefy\audio\lists\AudioList;
 use iutnc\deefy\audio\tracks\AlbumTrack;
 use iutnc\deefy\audio\tracks\PodcastTrack;
 
+/**
+ * Class AudioListRenderer est une classe qui permet de rendre une liste de pistes audio
+ */
 class AudioListRenderer implements Renderer
 {
     private AudioList $audioList;

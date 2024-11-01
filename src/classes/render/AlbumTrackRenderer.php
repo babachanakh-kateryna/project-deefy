@@ -4,6 +4,9 @@ namespace iutnc\deefy\render;
 
 use iutnc\deefy\audio\tracks as tracks;
 
+/**
+ * Class AlbumTrackRenderer est une classe qui permet de rendre une piste d'un album
+ */
 class AlbumTrackRenderer extends AudioTrackRenderer
 {
     private tracks\AlbumTrack $albumTrack;

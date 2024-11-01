@@ -5,6 +5,9 @@ use iutnc\deefy\repository\DeefyRepository;
 use PDO;
 use iutnc\deefy\exception\AuthnException;
 
+/**
+ * Class AuthProvider est une classe qui represente le fournisseur d'authentification
+ */
 class AuthProvider
 {
     // methode pour se connecter
