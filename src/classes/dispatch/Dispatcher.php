@@ -22,7 +22,7 @@ class Dispatcher
                 $action = new act\DefaultAction();
                 $html = $action->execute();
                 break;
-            case 'playlist':
+            case 'display-playlist':
                 $action = new act\DisplayPlaylistAction();
                 $html = $action->execute();
                 break;
@@ -61,7 +61,7 @@ class Dispatcher
          <li><a href="?action=default">Home</a></li>
          <li><a href="?action=signin">Sign In</a></li>
          <li><a href="?action=add-user">Register</a></li>
-         <li><a href="?action=playlist">Display Playlist in Session</a></li>
+         <li><a href="?action=display-playlist">Display Playlist in Session</a></li>
          <li><a href="?action=add-playlist">Add a Playlist</a></li>
          <li><a href="?action=add-track">Add a Track to the Playlist</a></li>
     </ul>

@@ -79,6 +79,28 @@ class DeefyRepository
         $playlist = new Playlist($data['nom']);
         $playlist->id = $data['id'];
 
+        // recuperer les pistes associees a la playlist
+        $trackStmt = $this->pdo->prepare("
+        SELECT t.id, t.titre, t.genre, t.duree, t.filename, t.type, t.auteur_podcast, t.date_posdcast
+        FROM track t
+        INNER JOIN playlist2track p2t ON t.id = p2t.id_track
+        WHERE p2t.id_pl = :id
+        ORDER BY p2t.no_piste_dans_liste
+    ");
+        $trackStmt->execute(['id' => $id]);
+        $tracksData = $trackStmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // ajouter les pistes a la playlist
+        foreach ($tracksData as $trackData) {
+            if ($trackData['type'] === 'P') { // Exemple de vérification pour un type de piste
+                $track = new PodcastTrack($trackData['titre'], $trackData['filename'], $trackData['duree']);
+                $track->setAuteur($trackData['auteur_podcast']);
+                $track->setDate($trackData['date_posdcast']);
+                $track->setGenre($trackData['genre']);
+                $playlist->ajouterPiste($track);
+            }
+        }
+
         return $playlist;
     }
 
