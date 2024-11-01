@@ -26,7 +26,8 @@ try {
     echo "Error : " . $e->getMessage() . "\n <br>";
 }
 
-//$track = new \iutnc\deefy\audio\tracks\PodcastTrack('test', 'test.mp3', 'auteur', '2021-01-01', 10, 'genre');
-//$track = $repo->savePodcastTrack($track);
-//print "track 2 : " . $track->titre . ":". get_class($track). "\n";
-//$repo->addTrackToPlaylist($pl->id, $track->id);
+$track = new \iutnc\deefy\audio\tracks\PodcastTrack('test', 'music/already_rich.mp3', 10, 'auteur', '2021-01-01', 'genre');;
+$track = $repo->savePodcastTrack($track);
+
+print "track 2 : " . $track->titre . " : ". get_class($track). "\n";
+$repo->addTrackToPlaylist($pl->id, $track->id);

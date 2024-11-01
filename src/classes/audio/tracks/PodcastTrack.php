@@ -8,12 +8,12 @@ class PodcastTrack extends AudioTrack
     protected string $date;
     protected string $genre;
 
-    public function __construct($titre, $chemin, $duree = 0)
+    public function __construct(string $titre, string $chemin, int $duree = 0, string $auteur = "Inconnu", string $date = "Inconnue", string $genre = "Inconnu")
     {
         parent::__construct($titre, $chemin, $duree);
-        $this->auteur = "Inconnu";
-        $this->date = "Inconnue";
-        $this->genre = "Inconnu";
+        $this->auteur = $auteur;
+        $this->date = $date;
+        $this->genre = $genre;
     }
 
     // Getters

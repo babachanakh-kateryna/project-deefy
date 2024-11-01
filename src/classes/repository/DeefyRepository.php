@@ -3,6 +3,7 @@
 namespace iutnc\deefy\repository;
 
 use iutnc\deefy\audio\lists\Playlist;
+use iutnc\deefy\audio\tracks\PodcastTrack;
 use PDO;
 
 class DeefyRepository
@@ -44,7 +45,16 @@ class DeefyRepository
     public function findAllPlaylists(): array
     {
         $stmt = $this->pdo->query("SELECT id, nom FROM playlist");
-        return $stmt->fetchAll(PDO::FETCH_OBJ);
+        $playlistsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $playlists = [];
+        foreach ($playlistsData as $data) {
+            $playlist = new Playlist($data['nom']);
+            $playlist->id = $data['id'];
+            $playlists[] = $playlist;
+        }
+
+        return $playlists;
     }
 
     // Methode pour recuperer une playlist par son id
@@ -71,5 +81,41 @@ class DeefyRepository
         $stmt->execute(['nom' => $playlist->nom]);
         $playlist->id = $this->pdo->lastInsertId();
         return $playlist;
+    }
+
+    // Methode pour sauvegarder une piste de podcast
+    public function savePodcastTrack(PodcastTrack $track): PodcastTrack
+    {
+        $stmt = $this->pdo->prepare("
+            INSERT INTO track (titre, genre, duree, filename, type, auteur_podcast, date_posdcast)
+            VALUES (:titre, :genre, :duree, :filename, 'P', :auteur_podcast, :date_posdcast)
+        ");
+
+        $stmt->execute([
+            'titre' => $track->titre,
+            'genre' => $track->genre,
+            'duree' => $track->duree,
+            'filename' => $track->nom_du_fichier,
+            'auteur_podcast' => $track->auteur,
+            'date_posdcast' => $track->date,
+        ]);
+
+        $track->id = $this->pdo->lastInsertId();
+        return $track;
+    }
+
+    // Methode pour ajouter une piste a une playlist
+    public function addTrackToPlaylist(int $playlistId, int $trackId, int $noPisteDansListe): void
+    {
+        $stmt = $this->pdo->prepare("
+            INSERT INTO playlist2track (id_pl, id_track, no_piste_dans_liste)
+            VALUES (:id_pl, :id_track, :no_piste_dans_liste)
+        ");
+
+        $stmt->execute([
+            'id_pl' => $playlistId,
+            'id_track' => $trackId,
+            'no_piste_dans_liste' => $noPisteDansListe
+        ]);
     }
 }
