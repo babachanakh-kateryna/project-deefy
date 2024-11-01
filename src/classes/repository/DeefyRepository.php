@@ -4,6 +4,7 @@ namespace iutnc\deefy\repository;
 
 use iutnc\deefy\audio\lists\Playlist;
 use iutnc\deefy\audio\tracks\AlbumTrack;
+use iutnc\deefy\audio\tracks\AudioTrack;
 use iutnc\deefy\audio\tracks\PodcastTrack;
 use PDO;
 
@@ -135,23 +136,44 @@ class DeefyRepository
     }
 
     // Methode pour sauvegarder une piste de podcast
-    public function savePodcastTrack(PodcastTrack $track): PodcastTrack
+    public function saveTrack(AudioTrack $track, string $type): AudioTrack
     {
+        // common data pour tous les types de pistes
+        $data = [
+            'titre' => $track->__get('titre'),
+            'filename' => $track->__get('nom_du_fichier'),
+            'duree' => $track->getDuree(),
+            'type' => $type,
+            'auteur_podcast' => null,
+            'date_posdcast' => null,
+            'genre' => null,
+            'artiste_album' => null,
+            'titre_album' => null,
+            'annee_album' => null,
+            'numero_album' => null
+        ];
+
+        if ($type === 'P' && $track instanceof PodcastTrack) {
+            $data['auteur_podcast'] = $track->getAuteur();
+            $data['date_posdcast'] = $track->getDate();
+            $data['genre'] = $track->getGenre();
+        } elseif ($type === 'A' && $track instanceof AlbumTrack) {
+            $data['artiste_album'] = $track->artiste;
+            $data['titre_album'] = $track->album;
+            $data['annee_album'] = $track->annee;
+            $data['numero_album'] = $track->numero_piste;
+            $data['genre'] = $track->genre;
+        }
+
         $stmt = $this->pdo->prepare("
-            INSERT INTO track (titre, genre, duree, filename, type, auteur_podcast, date_posdcast)
-            VALUES (:titre, :genre, :duree, :filename, 'P', :auteur_podcast, :date_posdcast)
-        ");
+        INSERT INTO track (titre, filename, duree, type, auteur_podcast, date_posdcast, genre, artiste_album, titre_album, annee_album, numero_album)
+        VALUES (:titre, :filename, :duree, :type, :auteur_podcast, :date_posdcast, :genre, :artiste_album, :titre_album, :annee_album, :numero_album)
+    ");
+        $stmt->execute($data);
 
-        $stmt->execute([
-            'titre' => $track->titre,
-            'genre' => $track->genre,
-            'duree' => $track->duree,
-            'filename' => $track->nom_du_fichier,
-            'auteur_podcast' => $track->auteur,
-            'date_posdcast' => $track->date,
-        ]);
+        $trackId = $this->pdo->lastInsertId();
+        $track->id = $trackId;
 
-        $track->id = $this->pdo->lastInsertId();
         return $track;
     }
 
