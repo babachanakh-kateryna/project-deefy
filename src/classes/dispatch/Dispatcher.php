@@ -68,7 +68,7 @@ class Dispatcher
          <li><a href="?action=display-user-playlists">Display My Playlists</a></li>
          <li><a href="?action=display-playlist">Display Current Playlist</a></li>
          <li><a href="?action=add-playlist">Add a Playlist</a></li>
-         <li><a href="?action=add-track">Add a Track to the Playlist</a></li>
+<!--         <li><a href="?action=add-track">Add a Track to the Playlist</a></li>-->
     </ul>
     $html
 </body>

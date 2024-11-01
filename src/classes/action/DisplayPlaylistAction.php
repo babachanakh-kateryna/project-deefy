@@ -15,7 +15,9 @@ class DisplayPlaylistAction extends Action
             if (isset($_SESSION['current_playlist'])) {
                 $playlist = $_SESSION['current_playlist'];
                 $renderer = new AudioListRenderer($playlist);
-                return "<h3>Current Playlist: {$playlist->nom}</h3>" . $renderer->render(1);
+                return "<h3>Current Playlist: {$playlist->nom}</h3>"
+                    . $renderer->render(1)
+                    . '<br><a href="?action=add-track">Add a new track to this playlist</a>';
             } else {
                 return "<div>Error: No playlist selected.</div>";
             }
@@ -32,7 +34,9 @@ class DisplayPlaylistAction extends Action
 
             // la playlist courante
             $renderer = new AudioListRenderer($playlist);
-            return "<h3>Current Playlist: {$playlist->nom}</h3>" . $renderer->render(1);
+            return "<h3>Current Playlist: {$playlist->nom}</h3>"
+                . $renderer->render(1)
+                . '<br><a href="?action=add-track">Add a new track to this playlist</a>';
 
         } catch (\Exception $e) {
             return "<div>Error: " . $e->getMessage() . "</div>";
