@@ -2,6 +2,9 @@
 
 namespace iutnc\deefy\action;
 
+use iutnc\deefy\auth\AuthProvider;
+use iutnc\deefy\exception\AuthnException;
+
 class AddUserAction extends Action
 {
     public function execute(): string
@@ -21,14 +24,14 @@ class AddUserAction extends Action
     {
         return <<<HTML
 <form method="post" action="?action=add-user">
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required>
-    
     <label for="email">Email:</label>
     <input type="email" id="email" name="email" required>
     
-    <label for="age">Age:</label>
-    <input type="number" id="age" name="age" required min="0" max="150">
+    <label for="passwd">Password:</label>
+    <input type="password" id="passwd" name="passwd" required>
+
+    <label for="passwd_confirm">Confirm Password:</label>
+    <input type="password" id="passwd_confirm" name="passwd_confirm" required>
     
     <button type="submit">Register</button>
 </form>
@@ -37,10 +40,20 @@ HTML;
 
     private function processForm(): string
     {
-        $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-        $age = filter_input(INPUT_POST, 'age', FILTER_SANITIZE_NUMBER_INT);
+        $passwd = $_POST['passwd'];
+        $passwd_confirm = $_POST['passwd_confirm'];
 
-        return "<div>Name: $name, Email: $email, Age: $age years</div>";
+        // verifier que les mots de passe correspondent
+        if ($passwd !== $passwd_confirm) {
+            return "<div>Error: Passwords do not match.</div>";
+        }
+
+        try {
+            AuthProvider::register($email, $passwd);
+            return "<div>Registration successful for $email</div>";
+        } catch (AuthnException $e) {
+            return "<div>Error: " . $e->getMessage() . "</div>";
+        }
     }
 }

@@ -17,6 +17,7 @@ class AuthProvider
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
+        // verifier si l'utilisateur existe
         if (!$user) {
             throw new AuthnException("User not found with email $email");
         }
@@ -24,6 +25,7 @@ class AuthProvider
 //        echo "User hashed password from DB: {$user['passwd']}";
 //        echo "Entered password: $passwd2check";
 
+        // verifier si le mot de passe est correct
         if (!password_verify($passwd2check, $user['passwd'])) {
             throw new AuthnException("Password verification failed for email $email");
         }
@@ -31,4 +33,33 @@ class AuthProvider
         $_SESSION['user'] = $email;
     }
 
+    // methode pour s'inscrire
+    public static function register(string $email, string $pass): void
+    {
+        $pdo = DeefyRepository::getInstance()->getPDO();
+
+        // verifier si l'email est corect
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new AuthnException("Auth error: invalid user email");
+        }
+
+        // verifier si le mot de passe est minimum 10 caracteres
+        if (strlen($pass) < 10) {
+            throw new AuthnException("Auth error: password must be at least 10 characters long");
+        }
+
+        // verifier si l'utilisateur existe deja
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM user WHERE email = ?");
+        $stmt->execute([$email]);
+        if ($stmt->fetchColumn() > 0) {
+            throw new AuthnException("Auth error: an account with this email already exists");
+        }
+
+        // hasher le mot de passe
+        $hash = password_hash($pass, PASSWORD_DEFAULT, ['cost' => 12]);
+
+        // ajouter l'utilisateur a la base de donnees avec le role 1
+        $stmt = $pdo->prepare("INSERT INTO user (email, passwd, role) VALUES (?, ?, ?)");
+        $stmt->execute([$email, $hash, 1]);
+    }
 }
