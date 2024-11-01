@@ -14,7 +14,7 @@ class Dispatcher
 
     function __construct()
     {
-        $this->action = isset($_GET['action']) ? $_GET['action'] : 'default';
+        $this->action = isset($_GET['action']) ? htmlspecialchars($_GET['action'], ENT_QUOTES, 'UTF-8') : 'default';
     }
 
     public function run(): void
@@ -61,7 +61,7 @@ class Dispatcher
     {
         // verivier si l'utilisateur est connecte
         $isSignedIn = isset($_SESSION['user']);
-        $username = $isSignedIn ? $_SESSION['user'] : '';
+        $username = $isSignedIn ? htmlspecialchars($_SESSION['user'], ENT_QUOTES, 'UTF-8') : '';
 
         echo <<<HTML
 <!DOCTYPE html>

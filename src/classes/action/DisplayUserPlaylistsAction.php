@@ -25,14 +25,15 @@ class DisplayUserPlaylistsAction extends Action
 
             $html = "<h3>Your Playlists:</h3><ul>";
             foreach ($playlists as $playlist) {
-                $html .= "<li><a href=\"?action=display-playlist&id={$playlist->id}\">{$playlist->nom}</a></li>";
-            }
+                $safePlaylistId = htmlspecialchars((string)$playlist->id, ENT_QUOTES, 'UTF-8');
+                $safePlaylistName = htmlspecialchars($playlist->nom, ENT_QUOTES, 'UTF-8');
+                $html .= "<li><a href=\"?action=display-playlist&id={$safePlaylistId}\">{$safePlaylistName}</a></li>";            }
             $html .= "</ul>";
 
             return $html;
 
         } catch (\Exception $e) {
-            return "<div>Error: " . $e->getMessage() . "</div>";
+            return "<div>Error: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8') . "</div>";
         }
     }
 }

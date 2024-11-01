@@ -15,14 +15,16 @@ class AuthProvider
     {
         $pdo = DeefyRepository::getInstance()->getPDO();
 
-        $stmt = $pdo->prepare("SELECT * FROM user WHERE email = ?");
-        $stmt->execute([$email]);
+        $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+
+        $stmt = $pdo->prepare("SELECT * FROM user WHERE email = :email");
+        $stmt->execute(['email' => $email]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
         // verifier si l'utilisateur existe
         if (!$user) {
-            throw new AuthnException("User not found with email $email");
+            throw new AuthnException("User not found with email ". htmlspecialchars($email));
         }
 
 //        echo "User hashed password from DB: {$user['passwd']}";
@@ -30,19 +32,21 @@ class AuthProvider
 
         // verifier si le mot de passe est correct
         if (!password_verify($passwd2check, $user['passwd'])) {
-            throw new AuthnException("Password verification failed for email $email");
+            throw new AuthnException("Password verification failed for email ". htmlspecialchars($email));
         }
         //echo $user['id'];
 
         // stocker l'utilisateur dans la session
         $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user'] = $email;
+        $_SESSION['user'] = htmlspecialchars($email);
     }
 
     // methode pour s'inscrire
     public static function register(string $email, string $pass): void
     {
         $pdo = DeefyRepository::getInstance()->getPDO();
+
+        $email = filter_var($email, FILTER_SANITIZE_EMAIL);
 
         // verifier si l'email est corect
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -54,9 +58,14 @@ class AuthProvider
             throw new AuthnException("Auth error: password must be at least 10 characters long");
         }
 
+        // verifier la force du mot de passe
+        if (!self::checkPasswordStrength($pass)) {
+            throw new AuthnException("Auth error: password is too weak");
+        }
+
         // verifier si l'utilisateur existe deja
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM user WHERE email = ?");
-        $stmt->execute([$email]);
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM user WHERE email = :email");
+        $stmt->execute(['email' => $email]);
         if ($stmt->fetchColumn() > 0) {
             throw new AuthnException("Auth error: an account with this email already exists");
         }
@@ -65,8 +74,9 @@ class AuthProvider
         $hash = password_hash($pass, PASSWORD_BCRYPT, ['cost' => 12]);
 
         // ajouter l'utilisateur a la base de donnees avec le role 1
-        $stmt = $pdo->prepare("INSERT INTO user (email, passwd, role) VALUES (?, ?, ?)");
-        $stmt->execute([$email, $hash, 1]);
+
+        $stmt = $pdo->prepare("INSERT INTO user (email, passwd, role) VALUES (:email, :passwd, :role)");
+        $stmt->execute(['email' => $email, 'passwd' => $hash, 'role' => 1]);
     }
 
     public static function getSignedInUser(): array
@@ -76,6 +86,18 @@ class AuthProvider
         }
 
         return $_SESSION['user'];
+    }
+
+    // verifier la force du mot de passe
+    public static function checkPasswordStrength(string $pass, int $minimumLength = 10): bool
+    {
+        $length = (strlen($pass) >= $minimumLength);
+        $digit = preg_match("#\d#", $pass);         // Au moins un chiffre
+        $special = preg_match("#\W#", $pass);       // Au moins un caractere special
+        $lower = preg_match("#[a-z]#", $pass);      // Au moins une lettre minuscule
+        $upper = preg_match("#[A-Z]#", $pass);      // Au moins une lettre majuscule
+
+        return $length && $digit && $special && $lower && $upper;
     }
 
 }

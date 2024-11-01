@@ -105,7 +105,7 @@ HTML;
         try {
             Authz::checkPlaylistOwner($playlistId);
         } catch (AuthnException $e) {
-            return "<div>Access denied: " . $e->getMessage() . "</div>";
+            return "<div>Access denied: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8') . "</div>";
         }
 
         // Assurer qu'un fichier a ete telecharge
@@ -181,7 +181,7 @@ HTML;
         $html = "<div>Track successfully added! Reloading playlist...</div>";
         $html .= "<script>
                 setTimeout(function() {
-                    window.location.href = '?action=display-playlist&id={$playlist->id}';
+                    window.location.href = '?action=display-playlist&id=" . htmlspecialchars($playlist->id, ENT_QUOTES, 'UTF-8') . "';
                 }, 2000);
               </script>";
 

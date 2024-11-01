@@ -62,7 +62,7 @@ class DeefyRepository
 
         $playlists = [];
         foreach ($playlistsData as $data) {
-            $playlist = new Playlist($data['nom']);
+            $playlist = new Playlist(htmlspecialchars($data['nom'], ENT_QUOTES, 'UTF-8'));
             $playlist->id = $data['id'];
             $playlists[] = $playlist;
         }
@@ -81,7 +81,7 @@ class DeefyRepository
             throw new \Exception("Playlist not found");
         }
 
-        $playlist = new Playlist($data['nom']);
+        $playlist = new Playlist(htmlspecialchars($data['nom'], ENT_QUOTES, 'UTF-8'));
         $playlist->id = $data['id'];
 
         // recuperer les pistes associees a la playlist
@@ -99,25 +99,28 @@ class DeefyRepository
         foreach ($tracksData as $trackData) {
             // if PodcastTrack
             if ($trackData['type'] === 'P') {
-                $track = new PodcastTrack($trackData['titre'], $trackData['filename'], $trackData['duree']);
-                $track->setAuteur($trackData['auteur_podcast']);
-                $track->setDate($trackData['date_posdcast']);
-                $track->setGenre($trackData['genre']);
+                $track = new PodcastTrack(
+                    htmlspecialchars($trackData['titre'], ENT_QUOTES, 'UTF-8'),
+                    htmlspecialchars($trackData['filename'], ENT_QUOTES, 'UTF-8'),
+                    $trackData['duree']
+                );
+                $track->setAuteur(htmlspecialchars($trackData['auteur_podcast'], ENT_QUOTES, 'UTF-8'));
+                $track->setDate(htmlspecialchars($trackData['date_posdcast'], ENT_QUOTES, 'UTF-8'));
+                $track->setGenre(htmlspecialchars($trackData['genre'], ENT_QUOTES, 'UTF-8'));
                 $playlist->ajouterPiste($track);
             }
             // if AlbumTrack
             elseif ($trackData['type'] === 'A')  {
 
                 $track = new AlbumTrack(
-                    $trackData['titre'],
-                    $trackData['filename'],
-                    $trackData['titre_album'] ,
+                    htmlspecialchars($trackData['titre'], ENT_QUOTES, 'UTF-8'),
+                    htmlspecialchars($trackData['filename'], ENT_QUOTES, 'UTF-8'),
+                    htmlspecialchars($trackData['titre_album'], ENT_QUOTES, 'UTF-8'),
                     $trackData['numero_album'],
                     $trackData['duree'],
-                    $trackData['artiste_album'],
+                    htmlspecialchars($trackData['artiste_album'], ENT_QUOTES, 'UTF-8'),
                     $trackData['annee_album'],
-                    $trackData['genre']
-
+                    htmlspecialchars($trackData['genre'], ENT_QUOTES, 'UTF-8')
                 );
                 $track->setArtiste($trackData['artiste_album'] ?? 'Unknown Artist');
                 $track->setAnnee($trackData['annee_album']  ?? 0); ;
@@ -132,6 +135,7 @@ class DeefyRepository
     // Methode pour sauvegarder une playlist vide
     public function saveEmptyPlaylist($playlist): Playlist
     {
+        $playlist->nom = htmlspecialchars($playlist->nom, ENT_QUOTES, 'UTF-8');
         $stmt = $this->pdo->prepare("INSERT INTO playlist (nom) VALUES (:nom)");
         $stmt->execute(['nom' => $playlist->nom]);
         $playlist->id = $this->pdo->lastInsertId();
@@ -143,8 +147,8 @@ class DeefyRepository
     {
         // common data pour tous les types de pistes
         $data = [
-            'titre' => $track->__get('titre'),
-            'filename' => $track->__get('nom_du_fichier'),
+            'titre' => htmlspecialchars($track->__get('titre'), ENT_QUOTES, 'UTF-8'),
+            'filename' => htmlspecialchars($track->__get('nom_du_fichier'), ENT_QUOTES, 'UTF-8'),
             'duree' => $track->getDuree(),
             'type' => $type,
             'auteur_podcast' => null,
@@ -157,15 +161,15 @@ class DeefyRepository
         ];
 
         if ($type === 'P' && $track instanceof PodcastTrack) {
-            $data['auteur_podcast'] = $track->getAuteur();
-            $data['date_posdcast'] = $track->getDate();
-            $data['genre'] = $track->getGenre();
+            $data['auteur_podcast'] = htmlspecialchars($track->getAuteur(), ENT_QUOTES, 'UTF-8');
+            $data['date_posdcast'] = htmlspecialchars($track->getDate(), ENT_QUOTES, 'UTF-8');
+            $data['genre'] = htmlspecialchars($track->getGenre(), ENT_QUOTES, 'UTF-8');
         } elseif ($type === 'A' && $track instanceof AlbumTrack) {
-            $data['artiste_album'] = $track->artiste;
-            $data['titre_album'] = $track->album;
+            $data['artiste_album'] = htmlspecialchars($track->artiste, ENT_QUOTES, 'UTF-8');
+            $data['titre_album'] = htmlspecialchars($track->album, ENT_QUOTES, 'UTF-8');
             $data['annee_album'] = $track->annee;
             $data['numero_album'] = $track->numero_piste;
-            $data['genre'] = $track->genre;
+            $data['genre'] = htmlspecialchars($track->genre, ENT_QUOTES, 'UTF-8');
         }
 
         $stmt = $this->pdo->prepare("
@@ -209,7 +213,7 @@ class DeefyRepository
 
         $playlists = [];
         foreach ($playlistsData as $data) {
-            $playlist = new Playlist($data['nom']);
+            $playlist = new Playlist(htmlspecialchars($data['nom'], ENT_QUOTES, 'UTF-8'));
             $playlist->id = $data['id'];
             $playlists[] = $playlist;
         }

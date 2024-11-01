@@ -55,7 +55,8 @@ HTML;
         // enregistre la playlist courante dans la session
         $_SESSION['current_playlist'] = $playlist;
 
-        $html = "<div>Playlist '{$playlist->nom}' created and set as current playlist.</div>";
+        $safePlaylistName = htmlspecialchars($playlist->nom, ENT_QUOTES, 'UTF-8');
+        $html = "<div>Playlist '{$safePlaylistName}' created and set as current playlist.</div>";
         $html .= '<a href="?action=add-track">Add a track to this playlist</a>';
         return $html;
     }

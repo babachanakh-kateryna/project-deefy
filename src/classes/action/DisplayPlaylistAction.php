@@ -28,7 +28,7 @@ class DisplayPlaylistAction extends Action
                 }
 
                 $renderer = new AudioListRenderer($playlist);
-                return "<h3>Current Playlist: {$playlist->nom}</h3>"
+                return "<h3>Current Playlist: htmlspecialchars($playlist->nom)</h3>"
                     . $renderer->render(1)
                     . '<br><a href="?action=add-track">Add a new track to this playlist</a>';
             } else {
@@ -50,14 +50,14 @@ class DisplayPlaylistAction extends Action
 
             // la playlist courante
             $renderer = new AudioListRenderer($playlist);
-            return "<h3>Current Playlist: {$playlist->nom}</h3>"
+            return "<h3>Current Playlist: htmlspecialchars($playlist->nom)</h3>"
                 . $renderer->render(1)
                 . '<br><a href="?action=add-track">Add a new track to this playlist</a>';
 
         } catch (AuthnException $e) {
-            return "<div>Access denied: " . $e->getMessage() . "</div>";
+            return "<div>Access denied: " .  htmlspecialchars($e->getMessage()) . "</div>";
         } catch (\Exception $e) {
-            return "<div>Error: " . $e->getMessage() . "</div>";
+            return "<div>Error: " .  htmlspecialchars($e->getMessage()) . "</div>";
         }
     }
 }

@@ -8,7 +8,7 @@ class InvalidPropertyNameException extends Exception
 {
     public function __construct(string $property)
     {
-        parent::__construct("Invalid property name: $property");
+        $safeValue = htmlspecialchars($property, ENT_QUOTES, 'UTF-8');
+        parent::__construct("Invalid property value: $safeValue");
     }
-
 }
