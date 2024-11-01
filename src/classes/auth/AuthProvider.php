@@ -12,7 +12,7 @@ class AuthProvider
     {
         $pdo = DeefyRepository::getInstance()->getPDO();
 
-        $stmt = $pdo->prepare("SELECT passwd FROM user WHERE email = ?");
+        $stmt = $pdo->prepare("SELECT * FROM user WHERE email = ?");
         $stmt->execute([$email]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -29,7 +29,10 @@ class AuthProvider
         if (!password_verify($passwd2check, $user['passwd'])) {
             throw new AuthnException("Password verification failed for email $email");
         }
+        //echo $user['id'];
 
+        // stocker l'utilisateur dans la session
+        $_SESSION['user_id'] = $user['id'];
         $_SESSION['user'] = $email;
     }
 
@@ -62,4 +65,14 @@ class AuthProvider
         $stmt = $pdo->prepare("INSERT INTO user (email, passwd, role) VALUES (?, ?, ?)");
         $stmt->execute([$email, $hash, 1]);
     }
+
+    public static function getSignedInUser(): array
+    {
+        if (!isset($_SESSION['user'])) {
+            throw new AuthnException("Auth error: not signed in");
+        }
+
+        return $_SESSION['user'];
+    }
+
 }
