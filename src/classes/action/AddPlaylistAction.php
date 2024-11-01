@@ -40,6 +40,15 @@ HTML;
         $playlist = new Playlist($name);
         $playlist = $repo->saveEmptyPlaylist($playlist);
 
+        // si l'utilisateur est authentifie, lie la playlist a l'utilisateur
+        if (isset($_SESSION['user_id'])) {
+            $userId = $_SESSION['user_id'];
+            $repo->linkUserToPlaylist($userId, $playlist->id);
+        } else {
+            return "<div>Error: User not authenticated.</div>";
+        }
+
+
         // enregistre la playlist courante dans la session
         $_SESSION['current_playlist'] = $playlist;
 

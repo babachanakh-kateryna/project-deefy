@@ -6,7 +6,7 @@ use iutnc\deefy\audio\tracks as tracks;
 use iutnc\deefy\render as render;
 use iutnc\deefy\repository\DeefyRepository;
 
-class AddPodcastTrackAction extends Action
+class AddTrackAction extends Action
 {
     public function execute(): string
     {
@@ -24,7 +24,7 @@ class AddPodcastTrackAction extends Action
     private function displayForm(): string
     {
         return <<<HTML
-<form method="post" action="?action=add-track" enctype="multipart/form-data"    >
+<form method="post" action="?action=add-track" enctype="multipart/form-data">
     <label for="title">Title:</label>
     <input type="text" id="title" name="title" required>
     <label for="author">Author:</label>
@@ -42,8 +42,8 @@ HTML;
 
     private function addTrack(): string
     {
-        if (!isset($_SESSION['playlist'])) {
-            return "<div>Error: No playlist found.</div>";
+        if (!isset($_SESSION['current_playlist'])) {
+            return "<div>Error: No current playlist found.</div>";
         }
 
         // Assurer qu'un fichier a ete telecharge
@@ -87,7 +87,7 @@ HTML;
         $track->setGenre($genre);
         $track = $repo->savePodcastTrack($track);
 
-        $playlist = $_SESSION['playlist'];
+        $playlist = $_SESSION['current_playlist'];
         $repo->addTrackToPlaylist($playlist->id, $track->id, $playlist->nombrePistes + 1);
 
         $renderer = new render\AudioListRenderer($playlist);

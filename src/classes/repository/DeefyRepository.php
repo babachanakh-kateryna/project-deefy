@@ -192,6 +192,13 @@ class DeefyRepository
         return $playlists;
     }
 
+    // Methode pour lier un utilisateur a une playlist
+    public function linkUserToPlaylist(int $userId, int $playlistId): void
+    {
+        $stmt = $this->pdo->prepare("INSERT INTO user2playlist (id_user, id_pl) VALUES (:id_user, :id_pl)");
+        $stmt->execute(['id_user' => $userId, 'id_pl' => $playlistId]);
+    }
+
     public function getPDO(): PDO
     {
         return $this->pdo;

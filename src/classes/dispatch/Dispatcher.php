@@ -31,7 +31,7 @@ class Dispatcher
                 $html = $action->execute();
                 break;
             case 'add-track':
-                $action = new act\AddPodcastTrackAction();
+                $action = new act\AddTrackAction();
                 $html = $action->execute();
                 break;
             case 'add-user':
