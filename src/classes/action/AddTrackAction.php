@@ -4,6 +4,8 @@ namespace iutnc\deefy\action;
 
 use getID3;
 use iutnc\deefy\audio\tracks as tracks;
+use iutnc\deefy\auth\Authz;
+use iutnc\deefy\exception\AuthnException;
 use iutnc\deefy\repository\DeefyRepository;
 
 /**
@@ -90,17 +92,26 @@ HTML;
 
     private function addTrack(): string
     {
-        if (!isset($_SESSION['current_playlist'])) {
+        $file = $_FILES['userfile'];
+        $fileExtension = strtolower(substr($file['name'], -4));
+        $playlist = $_SESSION['current_playlist'];
+        $playlistId = $_SESSION['current_playlist']->id;
+
+        if (!isset($playlist)) {
             return "<div>Error: No current playlist found.</div>";
         }
 
-        // Assurer qu'un fichier a ete telecharge
-        if (!isset($_FILES['userfile']) || $_FILES['userfile']['error'] != UPLOAD_ERR_OK) {
-            return "<div>Error: No file uploaded.</div>";
+        // verifier si l'utilisateur est le proprietaire de la playlist
+        try {
+            Authz::checkPlaylistOwner($playlistId);
+        } catch (AuthnException $e) {
+            return "<div>Access denied: " . $e->getMessage() . "</div>";
         }
 
-        $file = $_FILES['userfile'];
-        $fileExtension = strtolower(substr($file['name'], -4));
+        // Assurer qu'un fichier a ete telecharge
+        if (!isset($file) || $file['error'] != UPLOAD_ERR_OK) {
+            return "<div>Error: No file uploaded.</div>";
+        }
 
         // verifier le type de fichier et l'extension
         if ($fileExtension !== '.mp3' || $file['type'] !== 'audio/mpeg') {
@@ -165,7 +176,6 @@ HTML;
             return "<div>Error: Invalid track type selected.</div>";
         }
 
-        $playlist = $_SESSION['current_playlist'];
         $repo->addTrackToPlaylist($playlist->id, $track->id, $playlist->nombrePistes + 1);
 
         $html = "<div>Track successfully added! Reloading playlist...</div>";
