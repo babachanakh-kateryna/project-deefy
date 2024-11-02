@@ -10,30 +10,64 @@ class DisplayUserPlaylistsAction extends Action
 {
     public function execute(): string
     {
-        if (!isset($_SESSION['user_id'])) {
-            return "<div>Error: Not authenticated</div>";
+        if (!isset($_SESSION['user'])) {
+            return "<div class='alert alert-danger'>Error: Not authenticated</div>";
         }
 
-        $userId = $_SESSION['user_id'];
+        $userId = $_SESSION['user']['id'];
         $repo = DeefyRepository::getInstance();
 
         try {
             $playlists = $repo->findPlaylistsByUserId($userId);
+
+            $html = "<div class='container my-3'>";
+
             if (empty($playlists)) {
-                return "<div>You have no playlists</div>";
+                return "<div class='alert alert-info text-center'>You have no playlists.</div></div>";
             }
 
-            $html = "<h3>Your Playlists:</h3><ul>";
+            $html .= "<h2 class='text-white text-center mb-4'>Your Playlists</h2>";
+
+            $html .= "<div class='row'>";
             foreach ($playlists as $playlist) {
                 $safePlaylistId = htmlspecialchars((string)$playlist->id, ENT_QUOTES, 'UTF-8');
                 $safePlaylistName = htmlspecialchars($playlist->nom, ENT_QUOTES, 'UTF-8');
-                $html .= "<li><a href=\"?action=display-playlist&id={$safePlaylistId}\">{$safePlaylistName}</a></li>";            }
-            $html .= "</ul>";
+
+                $imagePath = $this->getRandomImagePath('images');
+
+                $html .= <<<HTML
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card text-white bg-dark h-100">
+                        <img src="$imagePath" class="card-img-top" alt="Playlist Cover">
+                        <div class="card-body">
+                            <h5 class="card-title">$safePlaylistName</h5>
+                            <a href="?action=display-playlist&id={$safePlaylistId}" class="btn btn-primary w-100">View Playlist</a>
+                        </div>
+                    </div>
+                </div>
+HTML;
+            }
+            $html .= "</div></div>";
 
             return $html;
 
         } catch (\Exception $e) {
-            return "<div>Error: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8') . "</div>";
+            return "<div class='alert alert-danger text-center my-4'>Error: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8') . "</div>";
         }
+    }
+
+    // Get a random image from the images directory
+    private function getRandomImagePath(string $directory): string
+    {
+        // all image files (jpg, png, jpeg, gif)
+        $images = glob($directory . '/*.{jpg,png,jpeg,gif}', GLOB_BRACE);
+
+        // verify if the directory is empty
+        if (empty($images)) {
+            return 'images/default.jpg';
+        }
+
+        // return a random image
+        return $images[array_rand($images)];
     }
 }

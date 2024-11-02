@@ -27,7 +27,7 @@ class AddUserAction extends Action
     {
         return <<<HTML
 <div class="full-screen-container d-flex justify-content-center align-items-center">
-    <div class="card-sign-in p-4 shadow-lg rounded" style="width: 100%; max-width: 400px;">
+    <div class="card-sign-in p-4 shadow-lg rounded">
         <h3 class="text-center mb-4">Register</h3>
         <form method="post" action="?action=add-user">
             <div class="mb-3">
