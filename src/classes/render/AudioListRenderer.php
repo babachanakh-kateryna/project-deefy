@@ -40,7 +40,11 @@ class AudioListRenderer implements Renderer
 
             $imagePath = $this->getRandomImagePath('images');
             $html .= <<<HTML
-                <div class='card play-card playlist-content text-white p-3 mb-2' data-filename='{$piste->nom_du_fichier}'>
+                <div class='card play-card playlist-content text-white p-3 mb-2' 
+                data-filename='{$piste->nom_du_fichier}'
+                data-title='{$piste->titre}'
+                data-artist='{$piste->artiste}'
+                >
                     <div class='d-flex justify-content-between align-items-center'>
                         <div class='col-1'>
                             <img src="{$imagePath}" class='card-img rounded me-3' alt='Album Cover'>

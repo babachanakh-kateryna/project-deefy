@@ -234,3 +234,63 @@ h1, h2, h3, h4, h5, h6 {
     background-color: #3c5144;
     /*background-color: #3c4751;*/
 }
+
+/* player */
+.audio-player {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 700px;
+    background-color: #333;
+    color: white;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.audio-player.hidden {
+    display: none;
+}
+
+.audio-controls {
+    display: flex;
+    gap: 10px;
+    margin-right: 2px;
+}
+
+.control-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#seek-bar {
+    flex: 1;
+    margin: 0 10px;
+}
+
+.volume-controls {
+    font-size: 0.9rem;
+    color: #b3b3b3;
+    padding-top: 5px;
+}
+
+.player .card-title {
+    font-size: 16px;
+    font-weight: 600;
+
+}
+
+.player .card-text {
+    font-size: 14px;
+    color: #b3b3b3;
+    margin-top: 4px;
+}
+

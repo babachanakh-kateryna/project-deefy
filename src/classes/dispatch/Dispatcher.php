@@ -114,7 +114,11 @@ HTML;
                         continue;
                     }
 
-                    echo "<div class='track-card play-card' data-filename='" . htmlspecialchars($track->nom_du_fichier, ENT_QUOTES, 'UTF-8') . "'>";
+                    echo "<div class='track-card play-card' data-filename='"
+                        . htmlspecialchars($track->nom_du_fichier, ENT_QUOTES, 'UTF-8') . "'
+                        data-title='" . htmlspecialchars($track->titre, ENT_QUOTES, 'UTF-8') . "'
+                        data-artist='" . htmlspecialchars($track->artiste, ENT_QUOTES, 'UTF-8') . "'>";
+
                     echo $renderer->render(\iutnc\deefy\render\Renderer::COMPACT);
                     echo "</div>";
                 }
@@ -129,11 +133,40 @@ HTML;
     <div class="content">
         $html
     </div>
+    <div id="audio-player" class="audio-player hidden">
+        <div class="col d-flex align-items-center">
+            <div class="audio-controls ">
+                <button id="prev-track" class="control-button"><img src="/figma_outils/mdi_prev.png" alt="Prev"></button>
+                <button id="play-pause" class="control-button">&#x25B6;</button>
+                <button id="next-track" class="control-button"><img src="/figma_outils/mdi_skip-next.png" alt="Next"></button>
+            </div>
+            <div class="ms-2 player row d-flex align-items-start">
+                <span id="track-title" class="card-title">Track Title</span>
+                <span id="track-artist" class="card-text">Artist Name</span>
+            </div>
+        </div>
+        <div class="row">
+            <input type="range" id="seek-bar" value="0" max="100">
+            <audio id="audio-element"></audio>
+            <div class="volume-controls d-flex justify-content-between">
+                <span id="current-time">0:00</span>
+                <span id="duration">0:00</span>
+            </div>
+        </div>
+    </div>
+
     <script src="vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
         const playButtons = document.querySelectorAll('.play-button');
         const trackCards = document.querySelectorAll('.play-card');
+        const audioPlayer = document.getElementById('audio-player');
+        const trackTitle = document.getElementById('track-title');
+        const trackArtist = document.getElementById('track-artist');
+        const seekBar = document.getElementById('seek-bar');
+        const playPauseButton = document.getElementById('play-pause');
+        const currentTimeDisplay = document.getElementById('current-time');
+        const durationDisplay = document.getElementById('duration');
         
         let currentAudio = null;
         let currentButton = null;
@@ -178,27 +211,48 @@ HTML;
             });
         });
         
+        
+        // PLAYER
+        
+        // Mise a jour du bouton Play/Pause
+        function updatePlayPauseButton() {
+            playPauseButton.innerHTML = currentAudio && !currentAudio.paused ? '&#10074;&#10074;' : '&#x25B6;';
+        }
+        
+        // Formater le temps en minutes:secondes
+        function formatTime(time) {
+            const minutes = Math.floor(time / 60);
+            const seconds = Math.floor(time % 60).toString().padStart(2, '0');
+            return minutes + ':' + seconds;
+        }
+        
+        // Mise a jour du bouton SeekBar
+        function updateSeekBar() {
+            seekBar.value = currentAudio.currentTime / currentAudio.duration * 100;
+            currentTimeDisplay.textContent = formatTime(currentAudio.currentTime);
+            durationDisplay.textContent = formatTime(currentAudio.duration);
+        }
+        
         trackCards.forEach(card => {
             card.addEventListener('click', () => {
                 const filename = card.getAttribute('data-filename');
+                const title = card.getAttribute('data-title');
+                const artist = card.getAttribute('data-artist');
                 
-                // verification de la presence d'un fichier
+                // Verifiez existence du fichier
                 if (!filename) {
                     console.error("Filename is missing for this track.");
                     return;
                 }
 
                 // Si l'audio est deja en cours de lecture, mettez-le en pause
-               if (currentAudio && currentCard === card) {
-                if (currentAudio.paused) {
-                    currentAudio.play();
-                    card.classList.add('playing');
-                } else {
-                    currentAudio.pause();
-                    card.classList.remove('playing');
+                if (currentAudio && currentCard === card) {
+                    currentAudio.paused ? currentAudio.play() : currentAudio.pause();
+                    updatePlayPauseButton();
+                    return;
                 }
-            } else {
-                //  Arretez l'audio en cours s'il est deja en cours de lecture
+                
+                // Si une autre piste est en cours de lecture, arreter la lecture
                 if (currentAudio) {
                     currentAudio.pause();
                     if (currentCard) currentCard.classList.remove('playing');
@@ -208,6 +262,10 @@ HTML;
                 currentAudio = new Audio(filename);
                 currentAudio.play().then(() => {
                     card.classList.add('playing');
+                    audioPlayer.classList.remove('hidden');
+                    trackTitle.textContent = title;
+                    trackArtist.textContent = artist;
+                    updatePlayPauseButton();
                 }).catch(error => {
                     console.error("Error playing audio:", error);
                 });
@@ -215,15 +273,36 @@ HTML;
                 // reinitialisation de letat de la carte de suivi une fois termine
                 currentAudio.addEventListener('ended', () => {
                     card.classList.remove('playing');
+                    audioPlayer.classList.add('hidden');
                     currentAudio = null;
                     currentCard = null;
                 });
+                
+                currentAudio.addEventListener('timeupdate', updateSeekBar);
 
                 currentCard = card;
-            }
-            });
         });
     });
+
+    // gestion Play/Pause
+    playPauseButton.addEventListener('click', () => {
+        if (currentAudio) {
+            if (currentAudio.paused) {
+                currentAudio.play();
+            } else {
+                currentAudio.pause();
+            }
+            updatePlayPauseButton();
+        }
+    });
+
+    // Rembobiner le curseur
+    seekBar.addEventListener('input', () => {
+        if (currentAudio) {
+            currentAudio.currentTime = currentAudio.duration * (seekBar.value / 100);
+        }
+    });
+});
 
 
     </script>
