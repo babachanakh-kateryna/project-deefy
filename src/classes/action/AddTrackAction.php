@@ -23,61 +23,77 @@ class AddTrackAction extends Action
             return $this->addTrack();
         }
 
-        return "<div>Invalid request method.</div>";
+        return "<div class='alert alert-danger'>Invalid request method.</div>";
     }
 
     private function displayForm(): string
     {
         return <<<HTML
-<form method="post" action="?action=add-track" enctype="multipart/form-data">
-    <label for="type">Track Type :</label>
-    <select id="type" name="type" required onchange="showFields()">
-        <option value="">Select Type</option>
-        <option value="P">Podcast</option>
-        <option value="A">Album Track</option>
-    </select>
-
-    <div id="podcastFields" style="display:none;">
-        <label for="title">Title :</label>
-        <input type="text" id="title" name="title">
-
-        <label for="author">Author :</label>
-        <input type="text" id="author" name="author">
-
-        <label for="date">Date :</label>
-        <input type="text" id="date" name="date">
-
-        <label for="genre">Genre :</label>
-        <input type="text" id="genre" name="genre">
-        
-        <label for="file">Audio File (.mp3) :</label>
-        <input type="file" id="file" name="userfile" accept=".mp3,audio/mpeg">
+<form method="post" action="?action=add-track" enctype="multipart/form-data" class="p-4 bg-dark text-light rounded">
+    <div class="mb-3">
+        <label for="type" class="form-label">Track Type:</label>
+        <select id="type" name="type" class="form-select" required onchange="showFields()">
+            <option value="">Select Type</option>
+            <option value="P">Podcast</option>
+            <option value="A">Album Track</option>
+        </select>
     </div>
 
-    <div id="albumFields" style="display:none;">
-        <label for="title">Title :</label>
-        <input type="text" id="title" name="title">
-
-        <label for="genre">Genre :</label>
-        <input type="text" id="genre" name="genre">
-
-        <label for="artist">Artist :</label>
-        <input type="text" id="artist" name="artist">
-
-        <label for="albumTitle">Album Title :</label>
-        <input type="text" id="albumTitle" name="albumTitle">
-
-        <label for="year">Year :</label>
-        <input type="number" id="year" name="year">
-
-        <label for="trackNumber">Track Number :</label>
-        <input type="number" id="trackNumber" name="trackNumber">
-        
-        <label for="file">Audio File (.mp3) :</label>
-        <input type="file" id="file" name="userfile" accept=".mp3,audio/mpeg">
+    <div id="podcastFields" class="add-track-fields">
+        <div class="mb-3">
+            <label for="title" class="form-label">Title:</label>
+            <input type="text" id="title" name="title" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="author" class="form-label">Author:</label>
+            <input type="text" id="author" name="author" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="date" class="form-label">Date:</label>
+            <input type="text" id="date" name="date" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="genre" class="form-label">Genre:</label>
+            <input type="text" id="genre" name="genre" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="file" class="form-label">Audio File (.mp3):</label>
+            <input type="file" id="file" name="userfile" accept=".mp3,audio/mpeg" class="form-control">
+        </div>
     </div>
 
-    <button type="submit">Add Track</button>
+    <div id="albumFields" class="add-track-fields">
+        <div class="mb-3">
+            <label for="title" class="form-label">Title:</label>
+            <input type="text" id="title" name="title" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="genre" class="form-label">Genre:</label>
+            <input type="text" id="genre" name="genre" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="artist" class="form-label">Artist:</label>
+            <input type="text" id="artist" name="artist" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="albumTitle" class="form-label">Album Title:</label>
+            <input type="text" id="albumTitle" name="albumTitle" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="year" class="form-label">Year:</label>
+            <input type="number" id="year" name="year" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="trackNumber" class="form-label">Track Number:</label>
+            <input type="number" id="trackNumber" name="trackNumber" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="file" class="form-label">Audio File (.mp3):</label>
+            <input type="file" id="file" name="userfile" accept=".mp3,audio/mpeg" class="form-control">
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Add Track</button>
 </form>
 
 <script>
@@ -90,6 +106,7 @@ function showFields() {
 HTML;
     }
 
+
     private function addTrack(): string
     {
         $file = $_FILES['userfile'];
@@ -98,29 +115,29 @@ HTML;
         $playlistId = $_SESSION['current_playlist']->id;
 
         if (!isset($playlist)) {
-            return "<div>Error: No current playlist found.</div>";
+            return "<div class='alert alert-danger text-center mt-3'>Error: No current playlist found.</div>";
         }
 
         // verifier si l'utilisateur est le proprietaire de la playlist
         try {
             Authz::checkPlaylistOwner($playlistId);
         } catch (AuthnException $e) {
-            return "<div>Access denied: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8') . "</div>";
+            return "<div class='alert alert-danger text-center mt-3'>Access denied: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8') . "</div>";
         }
 
         // Assurer qu'un fichier a ete telecharge
         if (!isset($file) || $file['error'] != UPLOAD_ERR_OK) {
-            return "<div>Error: No file uploaded.</div>";
+            return "<div class='alert alert-danger text-center mt-3'>Error: No file uploaded.</div>";
         }
 
         // verifier le type de fichier et l'extension
         if ($fileExtension !== '.mp3' || $file['type'] !== 'audio/mpeg') {
-            return "<div>Error: Invalid file type. Only MP3 files are allowed.</div>";
+            return "<div class='alert alert-danger text-center mt-3'>Error: Invalid file type. Only MP3 files are allowed.</div>";
         }
 
         // error if uploading PHP files
         if (strpos($file['name'], '.php') !== false) {
-            return "<div>Error: Uploading PHP files is not allowed.</div>";
+            return "<div class='alert alert-danger text-center mt-3'>Error: Uploading PHP files is not allowed.</div>";
         }
 
         // generer un nouveau nom de fichier et enregistrer le fichier
@@ -128,7 +145,7 @@ HTML;
         $destination = __DIR__ . '/../../../music/' . $newFilename;
 
         if (!move_uploaded_file($file['tmp_name'], $destination)) {
-            return "<div>Error: Failed to save file.</div>";
+            return "<div class='alert alert-danger text-center mt-3'>Error: Failed to save file.</div>";
         }
 
         // utiliser getID3 pour obtenir la duree du fichier
@@ -138,7 +155,7 @@ HTML;
 
         // verifier la duree du fichier
         if ($duration <= 0) {
-            return "<div>Error: The uploaded audio file has an invalid duration.</div>";
+            return "<div class='alert alert-danger text-center mt-3'>Error: The uploaded audio file has an invalid duration.</div>";
         }
 
         // file path PodcastTrack
@@ -173,12 +190,12 @@ HTML;
 
             $savedTrack = $repo->saveTrack($track, 'A');
         } else {
-            return "<div>Error: Invalid track type selected.</div>";
+            return "<div class='alert alert-danger text-center mt-3'>Error: Invalid track type selected.</div>";
         }
 
         $repo->addTrackToPlaylist($playlist->id, $track->id, $playlist->nombrePistes + 1);
 
-        $html = "<div>Track successfully added! Reloading playlist...</div>";
+        $html = "<div class='alert alert-success text-center mt-3' role='alert'>Track successfully added! Reloading playlist...</div>";
         $html .= "<script>
                 setTimeout(function() {
                     window.location.href = '?action=display-playlist&id=" . htmlspecialchars($playlist->id, ENT_QUOTES, 'UTF-8') . "';

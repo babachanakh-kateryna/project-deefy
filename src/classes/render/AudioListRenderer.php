@@ -29,7 +29,7 @@ class AudioListRenderer implements Renderer
     {
         $html = "<div class='playlist-container'>";
 //        $html .= "<h3 class='playlist-title'>" . htmlspecialchars($this->audioList->nom, ENT_QUOTES, 'UTF-8') . "</h3>";
-        $html .= "<div class='row track-list'>";
+        $html .= "<div class='row'>";
 
         foreach ($this->audioList->pistes as $piste) {
             if ($piste instanceof AlbumTrack) {
@@ -40,7 +40,7 @@ class AudioListRenderer implements Renderer
 
             $imagePath = $this->getRandomImagePath('images');
             $html .= <<<HTML
-                <div class='card text-white p-3'>
+                <div class='card text-white p-3 mb-2'>
                     <div class='d-flex justify-content-between align-items-center'>
                         <div class='col-1'>
                             <img src="{$imagePath}" class='card-img rounded me-3' alt='Album Cover'>

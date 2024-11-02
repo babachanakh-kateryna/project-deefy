@@ -53,12 +53,12 @@ HTML;
             return <<<HTML
 <div class="alert alert-success text-center d-flex justify-content-center" role="alert">
     Successfully signed in as {$email}. Redirecting to Home...
-</div>
-<script>
+</div><script>
     setTimeout(function() {
         window.location.href = '?action=default';
     }, 3000); 
 </script>
+
 HTML;
 
         } catch (AuthnException $e) {

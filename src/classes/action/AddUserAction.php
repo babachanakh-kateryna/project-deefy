@@ -68,7 +68,7 @@ HTML;
 </div>
 HTML;
         } catch (AuthnException $e) {
-            return "<div class='alert alert-danger text-center mt-3'>Error: " . htmlspecialchars($e->getMessage()) . "</div>";
+            return "<div class='alert alert-danger text-center mt-3'>" . htmlspecialchars($e->getMessage()) . "</div>";
         }
     }
 }

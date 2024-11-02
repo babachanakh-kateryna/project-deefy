@@ -10,6 +10,13 @@ class SignOutAction extends Action
     public function execute(): string
     {
         session_destroy();
-        return "<div>You have been signed out.</div><a href='?action=default'>Go to Home</a>";
+        $html = "<div class='alert alert-success text-center mt-3' role='alert'>You have been signed out.</div>";
+        $html .= "<script>
+                setTimeout(function() {
+                    window.location.href = '?action=default';
+                }, 2000); 
+            </script>";
+
+        return $html;
     }
 }
