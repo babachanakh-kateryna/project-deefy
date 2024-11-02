@@ -6,6 +6,7 @@
   },
   "require": {
     "ext-pdo": "*",
-    "james-heinrich/getid3": "^1.9"
+    "james-heinrich/getid3": "^1.9",
+    "twbs/bootstrap": "5.3.3"
   }
 }
