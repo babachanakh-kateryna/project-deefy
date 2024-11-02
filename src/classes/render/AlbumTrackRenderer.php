@@ -19,31 +19,31 @@ class AlbumTrackRenderer extends AudioTrackRenderer
     protected function renderCompact(): string
     {
         return "
-        <div>
-            <h3>" . htmlspecialchars($this->albumTrack->titre, ENT_QUOTES, 'UTF-8') . " - " . htmlspecialchars($this->albumTrack->artiste, ENT_QUOTES, 'UTF-8') . "</h3>
-            <audio controls>
-                <source src='" . htmlspecialchars($this->albumTrack->nom_du_fichier, ENT_QUOTES, 'UTF-8') . "' type='audio/mpeg'>
-                Your browser doesn't support the audio tag.
-            </audio> 
-        </div>
+            <div class='col'>
+                <h2 class='card-title'>" . htmlspecialchars($this->albumTrack->titre, ENT_QUOTES, 'UTF-8') . "</h2>
+                <h6 class='card-text'>" . htmlspecialchars($this->albumTrack->artiste, ENT_QUOTES, 'UTF-8')  . "</h6>
+            </div>
+        
         ";
     }
 
     protected function renderLong(): string
     {
         return "
-        <div>
-            <h3>" . htmlspecialchars($this->albumTrack->titre, ENT_QUOTES, 'UTF-8') . " - " . htmlspecialchars($this->albumTrack->artiste, ENT_QUOTES, 'UTF-8') . "</h3>
-            <p><strong>Album :</strong> " . htmlspecialchars($this->albumTrack->album, ENT_QUOTES, 'UTF-8') . "</p>
-            <p><strong>Year :</strong> " . htmlspecialchars((string)$this->albumTrack->annee, ENT_QUOTES, 'UTF-8') . "</p>
-            <p><strong>Track number :</strong> " . htmlspecialchars((string)$this->albumTrack->numero_piste, ENT_QUOTES, 'UTF-8') . "</p>
-            <p><strong>Genre :</strong> " . htmlspecialchars($this->albumTrack->genre, ENT_QUOTES, 'UTF-8') . "</p>
-            <p><strong>Duration :</strong> " . htmlspecialchars((string)$this->albumTrack->duree, ENT_QUOTES, 'UTF-8') . " secondes</p>
-            <audio controls>
-                <source src='" . htmlspecialchars($this->albumTrack->nom_du_fichier, ENT_QUOTES, 'UTF-8') . "' type='audio/mpeg'>
-                Your browser doesn't support the audio tag.
-            </audio> 
+        <div class='row'>
+            <div class='col-6'>
+                <h2 class='card-title'>" . htmlspecialchars($this->albumTrack->titre, ENT_QUOTES, 'UTF-8') . "</h2>
+                <h6 class='card-text'>" . htmlspecialchars($this->albumTrack->artiste, ENT_QUOTES, 'UTF-8')  . "</h6>
+            </div>
+            <div class='col-4'>
+                <h2 class='card-title'>" . htmlspecialchars($this->albumTrack->album, ENT_QUOTES, 'UTF-8') . "</h2>
+                <h6 class='card-text'>" . htmlspecialchars($this->albumTrack->annee, ENT_QUOTES, 'UTF-8')  . "</h6>
+            </div>
+            <div class='col d-flex align-items-center'>
+                <h2 class='card-title'>" . htmlspecialchars($this->albumTrack->duree, ENT_QUOTES, 'UTF-8') . "</h2>
+            </div>
         </div>
+        
         ";
     }
 }

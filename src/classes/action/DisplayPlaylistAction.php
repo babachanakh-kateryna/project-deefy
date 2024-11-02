@@ -24,15 +24,25 @@ class DisplayPlaylistAction extends Action
                 try {
                     Authz::checkPlaylistOwner($playlist->id);
                 } catch (AuthnException $e) {
-                    return "<div>Access denied: " . $e->getMessage() . "</div>";
+                    return "<div class='alert alert-danger'>Access denied: " . htmlspecialchars($e->getMessage()) . "</div>";
                 }
 
                 $renderer = new AudioListRenderer($playlist);
-                return "<h3>Current Playlist: htmlspecialchars($playlist->nom)</h3>"
-                    . $renderer->render(1)
-                    . '<br><a href="?action=add-track">Add a new track to this playlist</a>';
+                $playlistName = htmlspecialchars($playlist->nom, ENT_QUOTES, 'UTF-8');
+
+                return <<<HTML
+                <div class="container mt-5">
+                    <h2 class="text-white">Current Playlist: <strong>{$playlistName}</strong></h2>
+                    <div class="playlist-content my-4">
+                        {$renderer->render(1)}
+                    </div>
+                    <div class="mt-4">
+                        <a href="?action=add-track" class="btn btn-primary">Add a new track to this playlist</a>
+                    </div>
+                </div>
+HTML;
             } else {
-                return "<div>Error: No playlist selected.</div>";
+                return "<div class='alert alert-warning'>Error: No playlist selected.</div>";
             }
         }
 
@@ -50,14 +60,23 @@ class DisplayPlaylistAction extends Action
 
             // la playlist courante
             $renderer = new AudioListRenderer($playlist);
-            return "<h3>Current Playlist: htmlspecialchars($playlist->nom)</h3>"
-                . $renderer->render(1)
-                . '<br><a href="?action=add-track">Add a new track to this playlist</a>';
+            $playlistName = htmlspecialchars($playlist->nom, ENT_QUOTES, 'UTF-8');
 
+            return <<<HTML
+            <div class="container mt-5">
+                <h2 class="text-white"><strong>{$playlistName}</strong></h2>
+                <div class="playlist-content my-4">
+                    {$renderer->render(1)}
+                </div>
+                <div class="mt-4">
+                    <a href="?action=add-track" class="btn btn-primary">Add a new track to this playlist</a>
+                </div>
+            </div>
+HTML;
         } catch (AuthnException $e) {
-            return "<div>Access denied: " .  htmlspecialchars($e->getMessage()) . "</div>";
+            return "<div class='alert alert-danger'>Access denied: " . htmlspecialchars($e->getMessage()) . "</div>";
         } catch (\Exception $e) {
-            return "<div>Error: " .  htmlspecialchars($e->getMessage()) . "</div>";
+            return "<div class='alert alert-danger'>Error: " . htmlspecialchars($e->getMessage()) . "</div>";
         }
     }
 }

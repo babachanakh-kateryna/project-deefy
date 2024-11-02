@@ -19,27 +19,26 @@ class PodcastRenderer extends AudioTrackRenderer
     protected function renderCompact(): string
     {
         return "
-        <div classes='track-compact'>
-            <h3>" . htmlspecialchars($this->podcastTrack->titre, ENT_QUOTES, 'UTF-8') . " - " . htmlspecialchars($this->podcastTrack->auteur, ENT_QUOTES, 'UTF-8') . "</h3>
-            <audio controls>
-                <source src='" . htmlspecialchars($this->podcastTrack->nom_du_fichier, ENT_QUOTES, 'UTF-8') . "' type='audio/mpeg'>
-                Your browser doesn't support the audio tag.
-            </audio>
-        </div>
+            <div class='col'>
+                <h5 class='card-title'>" . htmlspecialchars($this->podcastTrack->titre, ENT_QUOTES, 'UTF-8') . "</h5>
+                <h6 class='card-text'>" . htmlspecialchars($this->podcastTrack->auteur, ENT_QUOTES, 'UTF-8')   . "</h6>
+            </div>
         ";
     }
 
     protected function renderLong(): string
     {
         return "
-        <div classes='track-long'>
-            <h3>" . htmlspecialchars($this->podcastTrack->titre, ENT_QUOTES, 'UTF-8') . " - " . htmlspecialchars($this->podcastTrack->auteur, ENT_QUOTES, 'UTF-8') . "</h3>
-            <p><strong>Date :</strong> " . htmlspecialchars($this->podcastTrack->date, ENT_QUOTES, 'UTF-8') . "</p>
-            <p><strong>Genre :</strong> " . htmlspecialchars($this->podcastTrack->genre, ENT_QUOTES, 'UTF-8') . "</p>
-            <audio controls>
-                <source src='" . htmlspecialchars($this->podcastTrack->nom_du_fichier, ENT_QUOTES, 'UTF-8') . "' type='audio/mpeg'>
-                Your browser doesn't support the audio tag.
-            </audio>
+        <div class='track-card mb-3'>
+            <div class=''>
+                <h5 class=''>" . htmlspecialchars($this->podcastTrack->titre, ENT_QUOTES, 'UTF-8') . " - " . htmlspecialchars($this->podcastTrack->auteur, ENT_QUOTES, 'UTF-8') . "</h5>
+                <p class='card-text'><strong>Date:</strong> " . htmlspecialchars($this->podcastTrack->date, ENT_QUOTES, 'UTF-8') . "</p>
+                <p class='card-text'><strong>Genre:</strong> " . htmlspecialchars($this->podcastTrack->genre, ENT_QUOTES, 'UTF-8') . "</p>
+                <audio controls class='w-100'>
+                    <source src='" . htmlspecialchars($this->podcastTrack->nom_du_fichier, ENT_QUOTES, 'UTF-8') . "' type='audio/mpeg'>
+                    Your browser doesn't support the audio tag.
+                </audio>
+            </div>
         </div>
         ";
     }
