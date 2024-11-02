@@ -51,8 +51,8 @@ HTML;
         $playlist = $repo->saveEmptyPlaylist($playlist);
 
         // si l'utilisateur est authentifie, lie la playlist a l'utilisateur
-        if (isset($_SESSION['user_id'])) {
-            $userId = $_SESSION['user_id'];
+        $userId = $_SESSION['user']['id'];
+        if ($userId) {
             $repo->linkUserToPlaylist($userId, $playlist->id);
         } else {
             return "<div class='alert alert-danger text-center mt-3'>Error: To add a playlist, you must first <a href='?action=signin' class='alert-link'>log in</a> or <a href='?action=add-user' class='alert-link'>register</a>.</div>";

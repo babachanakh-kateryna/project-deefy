@@ -70,7 +70,7 @@ class DefaultAction extends Action
                     <div class="flex-grow-1">
                         <h5 class="card-title mb-1 mt-2">{$title}</h5>
                         <p class="card-text mb-1">{$artist} - {$genre}</p>
-                        <button class="play-button d-flex justify-content-end">
+                    <button class="play-button d-flex justify-content-end" data-filename="{$filename}">
                         <img src="/figma_outils/Group3.png" alt="Play">
                     </button>
                     </div>

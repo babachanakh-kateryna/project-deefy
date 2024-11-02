@@ -37,20 +37,9 @@ class AddTrackAction extends Action
             <option value="P">Podcast</option>
             <option value="A">Album Track</option>
         </select>
-    </div>
-
-    <div id="podcastFields" class="add-track-fields">
-        <div class="mb-3">
+        <div class="mb-3 mt-3">
             <label for="title" class="form-label">Title:</label>
             <input type="text" id="title" name="title" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="author" class="form-label">Author:</label>
-            <input type="text" id="author" name="author" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="date" class="form-label">Date:</label>
-            <input type="text" id="date" name="date" class="form-control">
         </div>
         <div class="mb-3">
             <label for="genre" class="form-label">Genre:</label>
@@ -62,15 +51,18 @@ class AddTrackAction extends Action
         </div>
     </div>
 
+    <div id="podcastFields" class="add-track-fields">
+        <div class="mb-3">
+            <label for="author" class="form-label">Author:</label>
+            <input type="text" id="author" name="author" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="date" class="form-label">Date:</label>
+            <input type="text" id="date" name="date" class="form-control">
+        </div>
+    </div>
+
     <div id="albumFields" class="add-track-fields">
-        <div class="mb-3">
-            <label for="title" class="form-label">Title:</label>
-            <input type="text" id="title" name="title" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="genre" class="form-label">Genre:</label>
-            <input type="text" id="genre" name="genre" class="form-control">
-        </div>
         <div class="mb-3">
             <label for="artist" class="form-label">Artist:</label>
             <input type="text" id="artist" name="artist" class="form-control">
@@ -86,11 +78,7 @@ class AddTrackAction extends Action
         <div class="mb-3">
             <label for="trackNumber" class="form-label">Track Number:</label>
             <input type="number" id="trackNumber" name="trackNumber" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="file" class="form-label">Audio File (.mp3):</label>
-            <input type="file" id="file" name="userfile" accept=".mp3,audio/mpeg" class="form-control">
-        </div>
+        </div> 
     </div>
 
     <button type="submit" class="btn btn-primary mt-3">Add Track</button>
@@ -109,6 +97,10 @@ HTML;
 
     private function addTrack(): string
     {
+//        if (!isset($_FILES['userfile']) || $_FILES['userfile']['error'] != UPLOAD_ERR_OK) {
+//            return "<div class='alert alert-danger text-center mt-3'>Debug: " . print_r($_FILES, true) . "</div>";
+//        }
+
         $file = $_FILES['userfile'];
         $fileExtension = strtolower(substr($file['name'], -4));
         $playlist = $_SESSION['current_playlist'];
@@ -173,10 +165,7 @@ HTML;
             $date = filter_input(INPUT_POST, 'date', FILTER_SANITIZE_SPECIAL_CHARS);
 
             // PodcastTrack
-            $track = new tracks\PodcastTrack($title, $file_path, $duration);
-            $track->setAuteur($author);
-            $track->setDate($date);
-            $track->setGenre($genre);
+            $track = new tracks\PodcastTrack($title, $file_path, $duration, $author, $date, $genre);
 
             $savedTrack = $repo->saveTrack($track, 'P');
         } elseif ($type === 'A') {

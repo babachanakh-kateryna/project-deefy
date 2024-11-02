@@ -135,9 +135,9 @@ class DeefyRepository
     // Methode pour sauvegarder une playlist vide
     public function saveEmptyPlaylist($playlist): Playlist
     {
-        $playlist->nom = htmlspecialchars($playlist->nom, ENT_QUOTES, 'UTF-8');
+        $playlistName = htmlspecialchars($playlist->nom, ENT_QUOTES, 'UTF-8');
         $stmt = $this->pdo->prepare("INSERT INTO playlist (nom) VALUES (:nom)");
-        $stmt->execute(['nom' => $playlist->nom]);
+        $stmt->execute(['nom' => $playlistName]);
         $playlist->id = $this->pdo->lastInsertId();
         return $playlist;
     }
@@ -161,9 +161,9 @@ class DeefyRepository
         ];
 
         if ($type === 'P' && $track instanceof PodcastTrack) {
-            $data['auteur_podcast'] = htmlspecialchars($track->getAuteur(), ENT_QUOTES, 'UTF-8');
-            $data['date_posdcast'] = htmlspecialchars($track->getDate(), ENT_QUOTES, 'UTF-8');
-            $data['genre'] = htmlspecialchars($track->getGenre(), ENT_QUOTES, 'UTF-8');
+            $data['auteur_podcast'] = htmlspecialchars($track->auteur, ENT_QUOTES, 'UTF-8');
+            $data['date_posdcast'] = htmlspecialchars($track->date, ENT_QUOTES, 'UTF-8');
+            $data['genre'] = htmlspecialchars($track->genre, ENT_QUOTES, 'UTF-8');
         } elseif ($type === 'A' && $track instanceof AlbumTrack) {
             $data['artiste_album'] = htmlspecialchars($track->artiste, ENT_QUOTES, 'UTF-8');
             $data['titre_album'] = htmlspecialchars($track->album, ENT_QUOTES, 'UTF-8');

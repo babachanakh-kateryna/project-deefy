@@ -2,6 +2,8 @@
 
 namespace iutnc\deefy\audio\lists;
 
+use iutnc\deefy\exception\InvalidPropertyNameException;
+
 /**
  * Class AudioList is a class that represents a list of audio tracks
  */

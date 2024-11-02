@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace iutnc\deefy\dispatch;
 
 use iutnc\deefy\action as act;
+use iutnc\deefy\render\Renderer;
 
 /**
  * Class Dispatcher
@@ -94,15 +95,33 @@ HTML;
             echo <<<HTML
             <a href="?action=default">Home</a></li>
             <a href="?action=display-user-playlists">My Playlists</a>
-            <a href="?action=display-playlist">Current Playlist</a>
             <a href="?action=add-playlist">Add a Playlist</a>
-HTML;
-
-            // afficher le nom de l'utilisateur et le lien de deconnexion
-            echo <<<HTML
-<!--            <li class="welcome-message">Hello, $username!</li>-->
             <a href="?action=signout">Sign Out</a>
-HTML;
+            HTML;
+
+            // si on a current playlist, affiche les pistes (version compacte)
+            if (isset($_SESSION['current_playlist'])) {
+                $currentPlaylist = $_SESSION['current_playlist'];
+                echo "<div class='current-playlist'><a href='?action=display-playlist'><h3>Current Playlist</h3></a>";
+
+                foreach ($currentPlaylist->pistes as $track) {
+                    // type de piste
+                    if ($track instanceof \iutnc\deefy\audio\tracks\AlbumTrack) {
+                        $renderer = new \iutnc\deefy\render\AlbumTrackRenderer($track);
+                    } elseif ($track instanceof \iutnc\deefy\audio\tracks\PodcastTrack) {
+                        $renderer = new \iutnc\deefy\render\PodcastRenderer($track);
+                    } else {
+                        continue;
+                    }
+
+                    echo "<div class='track-card'>";
+                    echo $renderer->render(\iutnc\deefy\render\Renderer::COMPACT);
+                    echo "</div>";
+                }
+
+                echo "</div>";
+            }
+
         }
 
         echo <<<HTML
@@ -111,6 +130,30 @@ HTML;
         $html
     </div>
     <script src="vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const playButtons = document.querySelectorAll('.play-button');
+            let currentAudio = null;
+        
+            playButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const filename = button.getAttribute('data-filename');
+                    console.log("Playing file:", filename);
+        
+                    if (currentAudio) {
+                        currentAudio.pause();
+                        currentAudio.currentTime = 0;
+                    }
+        
+                    currentAudio = new Audio(filename);
+                    currentAudio.play().catch(error => {
+                        console.error("Error: ", error);
+                    });
+                });
+            });
+        });
+
+    </script>
 </body>
 </html>
 HTML;
