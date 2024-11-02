@@ -37,8 +37,10 @@ class AuthProvider
         //echo $user['id'];
 
         // stocker l'utilisateur dans la session
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user'] = htmlspecialchars($email);
+        $_SESSION['user'] = [
+            'id' => $user['id'],
+            'email' => $user['email'],
+        ];
     }
 
     // methode pour s'inscrire

@@ -24,15 +24,22 @@ class SignInAction extends Action
     private function displayForm(): string
     {
         return <<<HTML
-<form method="post" action="?action=signin">
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
-    
-    <label for="passwd">Password:</label>
-    <input type="password" id="passwd" name="passwd" required>
-    
-    <button type="submit">Sign In</button>
-</form>
+<div class="full-screen-container d-flex justify-content-center align-items-center">
+    <div class="card-sign-in p-4">
+        <h3 class="text-center mb-4">Sign In</h3>
+        <form method="post" action="?action=signin">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="passwd" class="form-label">Password:</label>
+                <input type="password" id="passwd" name="passwd" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Sign In</button>
+        </form>
+    </div>
+</div>
 HTML;
     }
 
@@ -43,9 +50,27 @@ HTML;
 
         try {
             AuthProvider::signin($email, $passwd);
-            return "<div>Successfully signed in as " . htmlspecialchars($email) . "</div><a href='?action=default'>Go to Home</a>";
+            return <<<HTML
+<div class="alert alert-success text-center d-flex justify-content-center" role="alert">
+    Successfully signed in as {$email}. Redirecting to Home...
+</div>
+<script>
+    setTimeout(function() {
+        window.location.href = '?action=default';
+    }, 3000); 
+</script>
+HTML;
+
         } catch (AuthnException $e) {
-            return "<div>Error: " . htmlspecialchars($e->getMessage()) . "</div><a href='?action=signin'>Try Again</a>";
+            return <<<HTML
+<div class="alert alert-danger text-center mt-3" role="alert">
+    Error: {$e->getMessage()}
+    <div class="text-center mt-2">
+        <a href="?action=signin" class="btn btn-link">Try Again</a>
+    </div>
+</div>
+
+HTML;
         }
     }
 }

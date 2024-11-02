@@ -1,13 +1,17 @@
 /* main */
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #121212;
-    color: #ffffff;
+body, html {
+    height: 100%;
     margin: 0;
     padding: 0;
-    overflow-y: hidden;
-    overflow-x: hidden;
+    font-family: 'Poppins', sans-serif;
 }
+
+body {
+     background-color: #121212;
+     color: #ffffff;
+     /*overflow-y: hidden;*/
+     /*overflow-x: hidden;*/
+ }
 
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Poppins', sans-serif;
@@ -74,6 +78,13 @@ h1, h2, h3, h4, h5, h6 {
     background-color: #484848 ;
 }
 
+.card-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
 .card .card-title {
     font-size: 1rem;
     font-weight: 600;
@@ -86,6 +97,16 @@ h1, h2, h3, h4, h5, h6 {
 
 .container {
     max-width: 1200px;
+    min-height: 100vh;
+}
+
+.card-sign-in{
+    width: 100%;
+    max-width: 400px;
+    background-color: #2b2b2b;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
 }
 
 /* styles pour les grope 8 */
@@ -122,23 +143,23 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .ellipse-second {
-    position: absolute;
+    position: fixed;
     width: 479px;
     height: 377px;
-    top: 330px;
-    left: 100px;
+    bottom: 0;
+    left: 90px;
     background: url('/figma_outils/Ellipse3.png') no-repeat center center;
     opacity: 0.72;
-    transform: rotate(50deg);
+    transform: rotate(45deg);
     z-index: -1;
 }
 
 .ellipse-third {
-    position: absolute;
+    position: fixed;
     width: 418px;
     height: 456px;
-    top: 246px;
-    left: 1140px;
+    bottom: 0;
+    right: 0;
     background: url('/figma_outils/Ellipse2.png') no-repeat center center;
     opacity: 0.72;
     z-index: -1;
@@ -156,4 +177,12 @@ h1, h2, h3, h4, h5, h6 {
 .play-button img {
     width: 45px;
     height: 45px;
+}
+
+.full-screen-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
 }

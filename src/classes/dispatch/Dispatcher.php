@@ -61,7 +61,7 @@ class Dispatcher
     {
         // verivier si l'utilisateur est connecte
         $isSignedIn = isset($_SESSION['user']);
-        $username = $isSignedIn ? htmlspecialchars($_SESSION['user'], ENT_QUOTES, 'UTF-8') : '';
+        $username = $isSignedIn ? (is_array($_SESSION['user']) ? htmlspecialchars($_SESSION['user']['name'] ?? 'Guest', ENT_QUOTES, 'UTF-8') : htmlspecialchars($_SESSION['user'], ENT_QUOTES, 'UTF-8')) : 'Guest';
 
         echo <<<HTML
 <!DOCTYPE html>
