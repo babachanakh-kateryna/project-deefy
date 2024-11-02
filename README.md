@@ -60,3 +60,4 @@ Voici un tableau de bord listant les fonctionnalités réalisées :
 
 ## Script de base de données
    
+La base de données d'origine a été modifiée. Le script projetdeefy.sql dans le dossier conf contient toutes les commandes SQL nécessaires pour créer et remplir la base de données avec les tables et les données de test nécessaires. 
