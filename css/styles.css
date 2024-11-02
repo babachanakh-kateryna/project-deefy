@@ -229,3 +229,8 @@ h1, h2, h3, h4, h5, h6 {
     color: #b3b3b3;
     margin-top: 4px;
 }
+
+.play-card.playing {
+    background-color: #3c5144;
+    /*background-color: #3c4751;*/
+}
