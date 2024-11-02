@@ -20,24 +20,32 @@ class AddUserAction extends Action
             return $this->processForm();
         }
 
-        return "<div>Invalid request method.</div>";
+        return "<div class='alert alert-danger'>Invalid request method.</div>";
     }
 
     private function displayForm(): string
     {
         return <<<HTML
-<form method="post" action="?action=add-user">
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
-    
-    <label for="passwd">Password:</label>
-    <input type="password" id="passwd" name="passwd" required>
-
-    <label for="passwd_confirm">Confirm Password:</label>
-    <input type="password" id="passwd_confirm" name="passwd_confirm" required>
-    
-    <button type="submit">Register</button>
-</form>
+<div class="full-screen-container d-flex justify-content-center align-items-center">
+    <div class="card-sign-in p-4 shadow-lg rounded" style="width: 100%; max-width: 400px;">
+        <h3 class="text-center mb-4">Register</h3>
+        <form method="post" action="?action=add-user">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="passwd" class="form-label">Password:</label>
+                <input type="password" id="passwd" name="passwd" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="passwd_confirm" class="form-label">Confirm Password:</label>
+                <input type="password" id="passwd_confirm" name="passwd_confirm" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+        </form>
+    </div>
+</div>
 HTML;
     }
 
@@ -49,14 +57,18 @@ HTML;
 
         // verifier que les mots de passe correspondent
         if ($passwd !== $passwd_confirm) {
-            return "<div>Error: Passwords do not match.</div>";
+            return "<div class='alert alert-danger text-center mt-3'>Error: Passwords do not match.</div>";
         }
 
         try {
             AuthProvider::register($email, $passwd);
-            return "<div>Account successfully created for " . htmlspecialchars($email). " You can now <a href='?action=signin'>sign in</a>.</div>";
+            return <<<HTML
+<div class="alert alert-success text-center mt-3" role="alert">
+    Account successfully created for {$email}. You can now <a href='?action=signin' class='alert-link'>sign in</a>.
+</div>
+HTML;
         } catch (AuthnException $e) {
-            return "<div>Error: " . htmlspecialchars($e->getMessage()) . "</div>";
+            return "<div class='alert alert-danger text-center mt-3'>Error: " . htmlspecialchars($e->getMessage()) . "</div>";
         }
     }
 }

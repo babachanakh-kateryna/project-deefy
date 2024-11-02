@@ -18,7 +18,7 @@ class SignInAction extends Action
         } elseif ($methode === 'POST') {
             return $this->processSignIn();
         }
-        return "<div>Invalid request method.</div>";
+        return "<div class='alert alert-danger'>Invalid request method.</div>";
     }
 
     private function displayForm(): string
