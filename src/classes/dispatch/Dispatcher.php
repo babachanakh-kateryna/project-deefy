@@ -68,87 +68,49 @@ class Dispatcher
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Deefy</title>
-    <style>
-        /* default */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .header h1 {
-            margin: 0;
-        }
-        .header .nav-links {
-            list-style: none;
-            display: flex;
-            gap: 20px;
-        }
-        .header .nav-links li {
-            display: inline;
-        }
-        .header .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .header .nav-links a:hover {
-            text-decoration: underline;
-        }
-        .welcome-message {
-            font-size: 16px;
-        }
-        .content {
-            padding: 20px;
-        }
-    </style>
+    <title>Deefy Music App<</title>
+    <link rel="stylesheet" href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css"> 
 </head>
 <body>
-    <div class="header">
-        <h1>Deefy Music App</h1>
-        <ul class="nav-links">
+    <div class="ellipse-first"></div>
+    <div class="ellipse-second"></div> 
+    <div class="ellipse-third"></div> 
+
+    <div class="sidebar">
+        <h2>Deefy</h2>
 HTML;
 
         // menu pour les utilisateurs non connectes
         if (!$isSignedIn) {
             echo <<<HTML
-            <li><a href="?action=default">Home</a></li>
-            <li><a href="?action=signin">Sign In</a></li>
-            <li><a href="?action=add-user">Register</a></li>
-            <li><a href="?action=display-user-playlists">Display My Playlists</a></li>
-            <li><a href="?action=display-playlist">Display Current Playlist</a></li>
-            <li><a href="?action=add-playlist">Add a Playlist</a></li>
+            <a href="?action=default">Home</a>
+            <a href="?action=signin">Sign In</a>
+            <a href="?action=add-user">Register</a></li>
 HTML;
         } else {
             // menu pour les utilisateurs connectes
             echo <<<HTML
-            <li><a href="?action=default">Home</a></li>
-            <li><a href="?action=display-user-playlists">Display My Playlists</a></li>
-            <li><a href="?action=display-playlist">Display Current Playlist</a></li>
-            <li><a href="?action=add-playlist">Add a Playlist</a></li>
+            <a href="?action=default">Home</a></li>
+            <a href="?action=display-user-playlists">My Playlists</a>
+            <a href="?action=display-playlist">Current Playlist</a>
+            <a href="?action=add-playlist">Add a Playlist</a>
 HTML;
 
             // afficher le nom de l'utilisateur et le lien de deconnexion
             echo <<<HTML
-            <li class="welcome-message">Hello, $username!</li>
-            <li><a href="?action=signout">Sign Out</a></li>
+<!--            <li class="welcome-message">Hello, $username!</li>-->
+            <a href="?action=signout">Sign Out</a>
 HTML;
         }
 
         echo <<<HTML
-        </ul>
     </div>
     <div class="content">
         $html
     </div>
+    <script src="vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 HTML;

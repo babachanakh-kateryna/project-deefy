@@ -1,0 +1,159 @@
+/* main */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #121212;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+/* pour side bar */
+.sidebar {
+    background-color: #1c1c1c;
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    color: #e1e1e1;
+    margin-bottom: 20px;
+}
+
+.sidebar a {
+    color: #9e9e9e;
+    text-decoration: none;
+    margin: 10px 0;
+    display: block;
+    font-size: 16px;
+}
+
+.sidebar a:hover {
+    color: #ffffff;
+}
+
+.sidebar .current-playlist {
+    margin-top: 20px;
+}
+
+.sidebar .playlist-item {
+    color: #e1e1e1;
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+}
+
+.sidebar .playlist-item:hover {
+    color: #ffffff;
+}
+
+/* main content */
+.content {
+    max-height: 100vh;
+    margin-left: 250px;
+    padding: 30px;
+}
+
+.content h1, .content h2 {
+    color: #e1e1e1;
+}
+
+/* styles pour cards */
+.card {
+    border: none;
+    background-color: #484848 ;
+}
+
+.card .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.card .card-text {
+    font-size: 0.875rem;
+    color: #9e9e9e;
+}
+
+.container {
+    max-width: 1200px;
+}
+
+/* styles pour les grope 8 */
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.next-icon {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.next-icon:hover {
+    transform: scale(1.1);
+}
+
+/* styles pour ellipses */
+.ellipse-first {
+    position: absolute;
+    width: 850px;
+    height: 613px;
+    top: -148px;
+    left: 448px;
+    background: url('/figma_outils/Ellipse1.png') no-repeat center center;
+    opacity: 0.89;
+    border-radius: 50%;
+    filter: blur(50px);
+    z-index: -1;
+}
+
+.ellipse-second {
+    position: absolute;
+    width: 479px;
+    height: 377px;
+    top: 330px;
+    left: 100px;
+    background: url('/figma_outils/Ellipse3.png') no-repeat center center;
+    opacity: 0.72;
+    transform: rotate(50deg);
+    z-index: -1;
+}
+
+.ellipse-third {
+    position: absolute;
+    width: 418px;
+    height: 456px;
+    top: 246px;
+    left: 1140px;
+    background: url('/figma_outils/Ellipse2.png') no-repeat center center;
+    opacity: 0.72;
+    z-index: -1;
+}
+
+/* styles pour  play-button*/
+.play-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: auto;
+}
+
+.play-button img {
+    width: 45px;
+    height: 45px;
+}

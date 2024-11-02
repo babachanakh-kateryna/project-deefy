@@ -232,4 +232,15 @@ class DeefyRepository
     {
         return $this->pdo;
     }
+
+    // Methode pour recuperer des pistes aleatoires par type
+    public function getRandomTracksByType(string $type, int $limit): array
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM track WHERE type = :type ORDER BY RAND() LIMIT :limit");
+        $stmt->bindParam(':type', $type, PDO::PARAM_STR);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
