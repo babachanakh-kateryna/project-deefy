@@ -39,7 +39,7 @@ class PodcastRenderer extends AudioTrackRenderer
                 <h6 class='card-text'>" . htmlspecialchars($this->podcastTrack->date, ENT_QUOTES, 'UTF-8')  . "</h6>
             </div>
             <div class='col d-flex align-items-center'>
-                <h2 class='card-title'>" . htmlspecialchars($this->podcastTrack->duree, ENT_QUOTES, 'UTF-8') . "</h2>
+                <h2 class='card-title'>" . htmlspecialchars($this->podcastTrack->formatDuration(), ENT_QUOTES, 'UTF-8') . "</h2>
             </div>
         </div>
         ";

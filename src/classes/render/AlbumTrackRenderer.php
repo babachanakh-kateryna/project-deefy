@@ -40,7 +40,7 @@ class AlbumTrackRenderer extends AudioTrackRenderer
                 <h6 class='card-text'>" . htmlspecialchars($this->albumTrack->annee, ENT_QUOTES, 'UTF-8')  . "</h6>
             </div>
             <div class='col d-flex align-items-center'>
-                <h2 class='card-title'>" . htmlspecialchars($this->albumTrack->duree, ENT_QUOTES, 'UTF-8') . "</h2>
+                <h2 class='card-title'>" . htmlspecialchars($this->albumTrack->formatDuration(), ENT_QUOTES, 'UTF-8')  . "</h2>
             </div>
         </div>
         

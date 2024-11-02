@@ -48,4 +48,13 @@ abstract class AudioTrack
     {
         return $this->duree;
     }
+
+    // Format the duration in minutes and seconds
+    public function formatDuration(): string
+    {
+        $minutes = floor($this->duree / 60);
+        $seconds = str_pad($this->duree % 60, 2, '0', STR_PAD_LEFT);
+        return "{$minutes}:{$seconds}";
+    }
+
 }
