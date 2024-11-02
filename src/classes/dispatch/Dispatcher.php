@@ -182,13 +182,13 @@ HTML;
             card.addEventListener('click', () => {
                 const filename = card.getAttribute('data-filename');
                 
-                // Проверка на наличие файла
+                // verification de la presence d'un fichier
                 if (!filename) {
                     console.error("Filename is missing for this track.");
                     return;
                 }
 
-                // Если уже воспроизводится аудио, то приостанавливаем его
+                // Si l'audio est deja en cours de lecture, mettez-le en pause
                if (currentAudio && currentCard === card) {
                 if (currentAudio.paused) {
                     currentAudio.play();
@@ -198,13 +198,13 @@ HTML;
                     card.classList.remove('playing');
                 }
             } else {
-                // Останавливаем предыдущий трек, если был воспроизведен
+                //  Arretez l'audio en cours s'il est deja en cours de lecture
                 if (currentAudio) {
                     currentAudio.pause();
                     if (currentCard) currentCard.classList.remove('playing');
                 }
 
-                // Создаем новый объект Audio для воспроизведения
+                // un nouvel objet Audio pour lire le fichier
                 currentAudio = new Audio(filename);
                 currentAudio.play().then(() => {
                     card.classList.add('playing');
@@ -212,14 +212,13 @@ HTML;
                     console.error("Error playing audio:", error);
                 });
 
-                // Сбрасываем состояние карточки трека после завершения
+                // reinitialisation de letat de la carte de suivi une fois termine
                 currentAudio.addEventListener('ended', () => {
                     card.classList.remove('playing');
                     currentAudio = null;
                     currentCard = null;
                 });
 
-                // Устанавливаем текущую карточку
                 currentCard = card;
             }
             });
