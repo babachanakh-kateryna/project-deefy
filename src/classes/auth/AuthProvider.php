@@ -36,10 +36,15 @@ class AuthProvider
         }
         //echo $user['id'];
 
+        if (!isset($user['role'])) {
+            throw new AuthnException("Authentication error: role is undefined for this user.");
+        }
+
         // stocker l'utilisateur dans la session
         $_SESSION['user'] = [
             'id' => $user['id'],
             'email' => $user['email'],
+            'role' => $user['role']
         ];
     }
 

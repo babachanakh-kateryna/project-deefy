@@ -15,6 +15,10 @@ class Authz
     {
         $user = AuthProvider::getSignedInUser();
 
+        if (!isset($user['role'])) {
+            throw new AuthnException("Access denied: role is undefined for this user.");
+        }
+
         if ($user['role'] !== $requiredRole && $user['role'] !== self::ROLE_ADMIN) {
             throw new AuthnException("Access denied: insufficient role");
         }
@@ -25,6 +29,15 @@ class Authz
     {
         $user = AuthProvider::getSignedInUser();
         $userId = $user['id'];
+
+        if (!isset($user['role'])) {
+            throw new AuthnException("Access denied: role is undefined for this user.");
+        }
+
+        if ($user['role'] === self::ROLE_ADMIN) {
+            return;
+        }
+
         $repo = DeefyRepository::getInstance();
 
         $stmt = $repo->getPDO()->prepare("
