@@ -53,11 +53,13 @@ Voici un tableau de bord listant les fonctionnalités réalisées :
 
 ### Étapes d'installation
 
-1. Cloner le dépôt Git
-2. Installer les dépendances
-3. Configurer la base de données
-4. Configurer le serveur Web
-5. Démarrer l'application
+1. **Cloner le dépôt Git :** Téléchargez le projet sur votre ordinateur.
+2. **Installer les dépendances :** Ouvrez le terminal dans le dossier du projet et exécutez les commandes suivantes :
+```composer require twbs/bootstrap:5.3.3``` pour installer Bootstrap, et ```composer require james-heinrich/getid3``` pour ajouter la bibliothèque getID3, utilisée pour connaître la durée d'un fichier mp3.
+4. **Configurer la base de données :** Importez le script database.sql situé dans le dossier _conf/_ pour créer et remplir la base de données.
+5. **Configurer le serveur Web.**
+6. **Démarrer l'application.**
+
 
 ---
 
