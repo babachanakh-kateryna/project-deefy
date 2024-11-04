@@ -2,6 +2,8 @@
 
 **Projet réalisé par :** BABACHANAKH Kateryna groupe S3A
 
+**Lien vers le dépôt :** https://github.com/babachanakh-kateryna/project-deefy.git
+
 ## Description du projet
 Deefy est une application Web de gestion musicale qui permet aux utilisateurs de gérer des playlists, d'écouter des pistes et de naviguer parmi leurs pistes préférées. Elle propose une interface pour ajouter des playlists, ajouter des pistes dans une playlist, et écouter la musique directement depuis l'application.
 
