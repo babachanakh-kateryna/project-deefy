@@ -3,6 +3,7 @@
 namespace iutnc\deefy\action;
 
 use iutnc\deefy\audio\lists\Playlist;
+use iutnc\deefy\auth\AuthProvider;
 use iutnc\deefy\repository\DeefyRepository;
 
 /**
@@ -10,7 +11,6 @@ use iutnc\deefy\repository\DeefyRepository;
  */
 class AddPlaylistAction extends Action
 {
-
     public function execute(): string
     {
         $methode = $_SERVER['REQUEST_METHOD'];
@@ -40,24 +40,20 @@ HTML;
     // cree une playlist et l'associe a l'utilisateur courant
     private function createPlaylist(): string
     {
+        $repo = DeefyRepository::getInstance();
+        $user = AuthProvider::getSignedInUser();
+
         $name = trim($_POST['name'] ?? '');
         if (empty($name)) {
             return "<div class='alert alert-danger text-center mt-3'>Error: Playlist name cannot be empty.</div>";
         }
         $name = filter_var($name, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $repo = DeefyRepository::getInstance();
         $playlist = new Playlist($name);
         $playlist = $repo->saveEmptyPlaylist($playlist);
 
         // si l'utilisateur est authentifie, lie la playlist a l'utilisateur
-        $userId = $_SESSION['user']['id'];
-        if ($userId) {
-            $repo->linkUserToPlaylist($userId, $playlist->id);
-        } else {
-            return "<div class='alert alert-danger text-center mt-3'>Error: To add a playlist, you must first <a href='?action=signin' class='alert-link'>log in</a> or <a href='?action=add-user' class='alert-link'>register</a>.</div>";
-        }
-
+        $repo->linkUserToPlaylist($user->getId(), $playlist->id);
 
         // enregistre la playlist courante dans la session
         $_SESSION['current_playlist'] = $playlist;

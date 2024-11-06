@@ -2,6 +2,7 @@
 
 namespace iutnc\deefy\action;
 
+use iutnc\deefy\auth\AuthProvider;
 use iutnc\deefy\repository\DeefyRepository;
 
 /**
@@ -12,6 +13,7 @@ class DefaultAction extends Action
     public function execute(): string
     {
         $repo = DeefyRepository::getInstance();
+        $user = AuthProvider::getSignedInUser();
 
         // Get random top hits
         $topHits = $repo->getRandomTracksByType('A', 3); // Type 'A' for Album Tracks
@@ -19,7 +21,7 @@ class DefaultAction extends Action
         // Get random top podcasts
         $topPodcasts = $repo->getRandomTracksByType('P', 3); // Type 'P' for Podcasts
 
-        $username = isset($_SESSION['user']) ? (is_array($_SESSION['user']) ? $_SESSION['user']['email'] : $_SESSION['user']) : 'Guest';
+        $username = $user ? htmlspecialchars($user->getEmail(), ENT_QUOTES, 'UTF-8') : 'Guest';
 
         $html = "<div class='container my-3'>";
         $html .= "<h3 class='mb-4'>Welcome, {$username}!</h3>";

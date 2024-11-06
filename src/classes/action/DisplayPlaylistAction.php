@@ -2,6 +2,7 @@
 
 namespace iutnc\deefy\action;
 
+use iutnc\deefy\auth\AuthProvider;
 use iutnc\deefy\auth\Authz;
 use iutnc\deefy\exception\AuthnException;
 use iutnc\deefy\render\AudioListRenderer;
@@ -14,6 +15,8 @@ class DisplayPlaylistAction extends Action
 {
     public function execute(): string
     {
+        $user = AuthProvider::getSignedInUser();
+
         // verifie si un id de playlist est fourni
         if (!isset($_GET['id'])) {
             // si la playlist courante est deja enregistree dans la session
@@ -22,7 +25,7 @@ class DisplayPlaylistAction extends Action
 
                 // verifie si l'utilisateur peut view playlist
                 try {
-                    Authz::checkPlaylistOwner($playlist->id);
+                    Authz::checkPlaylistOwner($user, $playlist->id);
                 } catch (AuthnException $e) {
                     return "<div class='alert alert-danger'>Access denied: " . htmlspecialchars($e->getMessage()) . "</div>";
                 }
@@ -51,7 +54,7 @@ HTML;
 
         try {
             // verifie si l'utilisateur peut view playlist
-            Authz::checkPlaylistOwner($playlistId);
+            Authz::checkPlaylistOwner($user, $playlistId);
 
             $playlist = $repo->findPlaylistById($playlistId);
 

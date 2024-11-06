@@ -243,4 +243,37 @@ class DeefyRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Methode pour recuperer un utilisateur par son email
+    public function getUserByEmail(string $email): ?array
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM user WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $user ?: null;
+    }
+
+    // Methode pour verifier si un utilisateur existe
+    public function userExists(string $email): bool
+    {
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM user WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        return $stmt->fetchColumn() > 0;
+    }
+
+    // Methode pour ajouter un utilisateur
+    public function addUser(string $email, string $hashedPassword, int $role): void
+    {
+        $stmt = $this->pdo->prepare("INSERT INTO user (email, passwd, role) VALUES (:email, :passwd, :role)");
+        $stmt->execute(['email' => $email, 'passwd' => $hashedPassword, 'role' => $role]);
+    }
+
+    // Methode pour verifier si un utilisateur est le proprietaire d'une playlist
+    public function isPlaylistOwner(int $userId, int $playlistId): bool
+    {
+        $stmt = $this->pdo->prepare("SELECT 1 FROM user2playlist WHERE id_user = :userId AND id_pl = :playlistId");
+        $stmt->execute(['userId' => $userId, 'playlistId' => $playlistId]);
+
+        return (bool)$stmt->fetch();
+    }
 }

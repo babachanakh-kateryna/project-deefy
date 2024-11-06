@@ -1,6 +1,7 @@
 <?php
 namespace iutnc\deefy\action;
 
+use iutnc\deefy\auth\AuthProvider;
 use iutnc\deefy\repository\DeefyRepository;
 
 /**
@@ -14,11 +15,11 @@ class DisplayUserPlaylistsAction extends Action
             return "<div class='alert alert-danger'>Error: Not authenticated</div>";
         }
 
-        $userId = $_SESSION['user']['id'];
         $repo = DeefyRepository::getInstance();
+        $user = AuthProvider::getSignedInUser();
 
         try {
-            $playlists = $repo->findPlaylistsByUserId($userId);
+            $playlists = $repo->findPlaylistsByUserId($user->getId());
 
             $html = "<div class='container my-3'>";
 

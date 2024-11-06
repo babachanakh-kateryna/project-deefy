@@ -4,6 +4,7 @@ namespace iutnc\deefy\action;
 
 use getID3;
 use iutnc\deefy\audio\tracks as tracks;
+use iutnc\deefy\auth\AuthProvider;
 use iutnc\deefy\auth\Authz;
 use iutnc\deefy\exception\AuthnException;
 use iutnc\deefy\repository\DeefyRepository;
@@ -97,6 +98,7 @@ HTML;
 
     private function addTrack(): string
     {
+        $user = AuthProvider::getSignedInUser();
 //        if (!isset($_FILES['userfile']) || $_FILES['userfile']['error'] != UPLOAD_ERR_OK) {
 //            return "<div class='alert alert-danger text-center mt-3'>Debug: " . print_r($_FILES, true) . "</div>";
 //        }
@@ -112,7 +114,7 @@ HTML;
 
         // verifier si l'utilisateur est le proprietaire de la playlist
         try {
-            Authz::checkPlaylistOwner($playlistId);
+            Authz::checkPlaylistOwner($user, $playlistId);
         } catch (AuthnException $e) {
             return "<div class='alert alert-danger text-center mt-3'>Access denied: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8') . "</div>";
         }
